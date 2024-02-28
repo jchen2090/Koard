@@ -16,4 +16,9 @@ describe("Page", () => {
     const subheading = screen.getByRole("heading", { level: 2 });
     expect(subheading).toBeInTheDocument();
   });
+
+  it("Test button link", () => {
+    const { getByText } = render(<Page />);
+    expect(getByText("Get Started")).toBeInTheDocument();
+  });
 });
