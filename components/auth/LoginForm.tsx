@@ -14,30 +14,20 @@ import {
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 
-const formSchema = z
-  .object({
-    email: z.string().min(1).email("Not a valid email"),
-    password: z.string().min(6),
-    confirmPassword: z.string().min(6),
-  })
-  .refine(
-    (data) => {
-      return data.confirmPassword === data.password;
-    },
-    { message: "Passwords do not match", path: ["confirmPassword"] },
-  );
+const formSchema = z.object({
+  email: z.string().min(1).email("Not a valid email"),
+  password: z.string().min(6),
+});
 
-export default function SignUpForm() {
+export default function LoginForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
       password: "",
-      confirmPassword: "",
     },
   });
 
-  //TODO: Hook up with supabase auth
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     alert(JSON.stringify(values));
   };
@@ -75,20 +65,7 @@ export default function SignUpForm() {
             </FormItem>
           )}
         />
-        <FormField
-          control={form.control}
-          name="confirmPassword"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Confirm Password</FormLabel>
-              <FormControl>
-                <Input type="password" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button className="mt-2">Sign up</Button>
+        <Button className="mt-2">Log in</Button>
       </form>
     </Form>
   );

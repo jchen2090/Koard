@@ -1,4 +1,4 @@
-import SignUpForm from "@/components/auth/SignUpForm";
+import LoginForm from "@/components/auth/LoginForm";
 import {
   Card,
   CardContent,
@@ -7,18 +7,18 @@ import {
 } from "@/components/ui/card";
 import Link from "next/link";
 
-export default function SignUp() {
+export default function Login() {
   return (
     <Card className="flex flex-col w-96 shadow-md">
       <CardHeader className="text-center text-2xl font-semibold my-2">
-        Sign Up
+        Authenticate
       </CardHeader>
       <CardContent>
-        <SignUpForm />
+        <LoginForm />
       </CardContent>
       <CardFooter className="justify-center">
-        <Link href="/login" className="hover:underline italic text-sm">
-          Already have an account? Log in
+        <Link href="/signup" className="hover:underline italic text-sm">
+          Don&apos;t have an account? Sign up
         </Link>
       </CardFooter>
     </Card>
