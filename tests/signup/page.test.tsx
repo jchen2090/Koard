@@ -10,7 +10,7 @@ describe("Test signup page", () => {
 
   it("Test form button", () => {
     const { getByText } = render(<SignUp />);
-    expect(getByText("Submit")).toBeInTheDocument();
+    expect(getByText("Sign up")).toBeInTheDocument();
   });
 
   it("Test form labels", () => {
