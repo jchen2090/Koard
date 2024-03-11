@@ -13,6 +13,8 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { signInWithEmailAndPassword } from "@/lib/supabase/actions";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string().min(1).email("Not a valid email"),
@@ -20,6 +22,7 @@ const formSchema = z.object({
 });
 
 export default function LoginForm() {
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -28,8 +31,15 @@ export default function LoginForm() {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    alert(JSON.stringify(values));
+  //TODO: Should route to home page post login
+  //TODO: Toast instead of alert
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      await signInWithEmailAndPassword(values);
+      router.push("/");
+    } catch (e) {
+      alert("Error with server, try again later");
+    }
   };
 
   return (
