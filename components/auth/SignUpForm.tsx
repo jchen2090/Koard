@@ -13,6 +13,7 @@ import {
 } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
+import { signUpWithEmailAndPassword } from "../../lib/supabase/actions";
 
 const formSchema = z
   .object({
@@ -37,9 +38,14 @@ export default function SignUpForm() {
     },
   });
 
-  //TODO: Hook up with supabase auth
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    alert(JSON.stringify(values));
+  //TODO: Currently 2FA is disabled, will enable someday
+  //TODO: User should be logged in and routed to home page after successful creation
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    try {
+      await signUpWithEmailAndPassword(values);
+    } catch (e) {
+      alert(`Error with server, try again later`);
+    }
   };
 
   return (
