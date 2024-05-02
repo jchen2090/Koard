@@ -7,7 +7,7 @@ export default function Home() {
       <h1 className="text-4xl font-semibold">Koard</h1>
       <h2 className="text-lg italic mt-1">Build Your Custom Kaban Board</h2>
       <Button className="mt-4">
-        <Link href="/signup">Get Started</Link>
+        <Link href="/project">Get Started</Link>
       </Button>
     </div>
   );
