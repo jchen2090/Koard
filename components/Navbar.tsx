@@ -8,7 +8,7 @@ export default async function Navbar() {
   try {
     data = await getUserSession();
   } catch (e) {
-    alert("Error with server, try again later");
+    console.log("Error with getting user session");
   }
 
   return (
