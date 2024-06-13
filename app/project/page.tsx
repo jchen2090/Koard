@@ -1,6 +1,7 @@
 "use client";
 
 import Column from "@/components/Column";
+import NewColumnButton from "@/components/NewColumnButton";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { useState } from "react";
 
@@ -105,6 +106,7 @@ export default function Project() {
           <Column tasks={tasks} setTasks={setTasks} idx={idx} columnName={columnName} key={idx} />
         ))}
       </DragDropContext>
+      <NewColumnButton tasks={tasks} setTasks={setTasks} />
     </div>
   );
 }
