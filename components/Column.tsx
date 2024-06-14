@@ -23,7 +23,7 @@ export default function Column({ tasks, idx, columnName, setTasks }: ColumnProps
   const taskData = tasks[columnName];
 
   return (
-    <div key={idx} className="p-2 w-72">
+    <div key={idx} className="p-2 min-w-72">
       <span className="flex justify-between items-center group mb-2">
         <ColumnLabel tasks={tasks} setTasks={setTasks} columnName={columnName} />
         <EditColumnDropDown tasks={tasks} setTasks={setTasks} columnName={columnName} />
