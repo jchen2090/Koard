@@ -3,7 +3,7 @@ import Task from "./Task";
 import { DataSchema } from "@/app/project/page";
 import { Dispatch, SetStateAction } from "react";
 import NewTaskButton from "./NewTaskButton";
-import { Badge } from "./ui/badge";
+import ColumnLabel from "./ColumnLabel";
 
 interface ColumnProps {
   tasks: DataSchema;
@@ -17,7 +17,7 @@ export default function Column({ tasks, idx, columnName, setTasks }: ColumnProps
 
   return (
     <div key={idx} className="p-2 w-72">
-      <Badge className="text-sm mb-2">{columnName}</Badge>
+      <ColumnLabel tasks={tasks} setTasks={setTasks} columnName={columnName} />
       <Droppable droppableId={columnName}>
         {(provided) => (
           <div ref={provided.innerRef} {...provided.droppableProps} className="flex flex-col">
