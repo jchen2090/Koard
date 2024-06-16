@@ -4,6 +4,7 @@ import { DataSchema } from "@/app/project/page";
 import { Dispatch, SetStateAction } from "react";
 import NewTaskButton from "./NewTaskButton";
 import ColumnLabel from "./ColumnLabel";
+import EditColumnDropDown from "./EditColumnDropDown";
 
 interface ColumnProps {
   tasks: DataSchema;
@@ -12,12 +13,21 @@ interface ColumnProps {
   setTasks: Dispatch<SetStateAction<DataSchema>>;
 }
 
+export interface ColumnHeaderProps {
+  tasks: DataSchema;
+  setTasks: Dispatch<SetStateAction<DataSchema>>;
+  columnName: string;
+}
+
 export default function Column({ tasks, idx, columnName, setTasks }: ColumnProps) {
   const taskData = tasks[columnName];
 
   return (
     <div key={idx} className="p-2 w-72">
-      <ColumnLabel tasks={tasks} setTasks={setTasks} columnName={columnName} />
+      <span className="flex justify-between items-center group mb-2">
+        <ColumnLabel tasks={tasks} setTasks={setTasks} columnName={columnName} />
+        <EditColumnDropDown tasks={tasks} setTasks={setTasks} columnName={columnName} />
+      </span>
       <Droppable droppableId={columnName}>
         {(provided) => (
           <div ref={provided.innerRef} {...provided.droppableProps} className="flex flex-col">
