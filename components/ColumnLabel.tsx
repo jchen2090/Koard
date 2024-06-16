@@ -1,17 +1,11 @@
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 import { RxChevronRight } from "react-icons/rx";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { DataSchema } from "@/app/project/page";
+import { ColumnHeaderProps } from "./Column";
 
-interface ColumnLabelProps {
-  columnName: string;
-  tasks: DataSchema;
-  setTasks: Dispatch<SetStateAction<DataSchema>>;
-}
-
-export default function ColumnLabel({ tasks, setTasks, columnName }: ColumnLabelProps) {
+export default function ColumnLabel({ tasks, setTasks, columnName }: ColumnHeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [newColumnName, setNewColumnName] = useState(columnName);
 
@@ -38,7 +32,7 @@ export default function ColumnLabel({ tasks, setTasks, columnName }: ColumnLabel
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button className="text-sm mb-2 h-6 min-w-28 px-2">{columnName}</Button>
+        <Button className="text-sm h-6 px-4">{columnName}</Button>
       </PopoverTrigger>
       <PopoverContent className="w-80">
         <form onSubmit={editColumnName} className="flex gap-2">
