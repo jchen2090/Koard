@@ -5,6 +5,16 @@ import { RxPencil2 } from "react-icons/rx";
 import { RxTrash } from "react-icons/rx";
 import { Input } from "./ui/input";
 import { DataSchema } from "@/app/project/page";
+import {
+  Dialog,
+  DialogHeader,
+  DialogTitle,
+  DialogContent,
+  DialogDescription,
+  DialogTrigger,
+  DialogFooter,
+} from "./ui/dialog";
+import { DialogClose } from "@radix-ui/react-dialog";
 
 interface TaskProps {
   taskName: string;
@@ -54,6 +64,36 @@ export default function Task({ taskName, setTasks, id, tasks, columnName }: Task
     changeTaskName();
   };
 
+  const DesctructiveModal = () => {
+    return (
+      <Dialog>
+        <DialogTrigger asChild>
+          <Button size="icon" variant="outline" className="bg-inherit">
+            <RxTrash className="h-4 w-4 text-destructive" />
+          </Button>
+        </DialogTrigger>
+        <DialogContent className="w-72">
+          <DialogHeader>
+            <DialogTitle>Delete Task?</DialogTitle>
+            <DialogDescription>This action is irreversible</DialogDescription>
+          </DialogHeader>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button size="sm" variant="destructive" onClick={deleteTask}>
+                Delete
+              </Button>
+            </DialogClose>
+            <DialogClose asChild>
+              <Button size="sm" variant="outline">
+                Cancel
+              </Button>
+            </DialogClose>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+    );
+  };
+
   return (
     <Card className="min-h-16 p-3 my-0.5 w-full bg-primary-foreground/30">
       {isEditing ? (
@@ -64,9 +104,7 @@ export default function Task({ taskName, setTasks, id, tasks, columnName }: Task
         <CardTitle className="flex justify-between items-center text-md">
           {taskName !== "" ? taskName : "Untitled"}
           <div className="flex gap-1">
-            <Button size="icon" variant="outline" className="bg-inherit" onClick={deleteTask}>
-              <RxTrash className="h-4 w-4 text-destructive" />
-            </Button>
+            <DesctructiveModal />
             <Button size="icon" variant="outline" className="bg-inherit" onClick={editTaskName}>
               <RxPencil2 className="h-4 w-4 dark:text-white text-black" />
             </Button>

@@ -7,7 +7,9 @@ import {
   DropdownMenuContent,
   DropdownMenuGroup,
 } from "./ui/dropdown-menu";
+import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogClose } from "./ui/dialog";
 import { ColumnHeaderProps } from "./Column";
+import { DialogHeader, DialogFooter } from "./ui/dialog";
 
 export default function EditColumnDropDown({ tasks, setTasks, columnName }: ColumnHeaderProps) {
   const deleteColumn = () => {
@@ -17,21 +19,49 @@ export default function EditColumnDropDown({ tasks, setTasks, columnName }: Colu
     setTasks(updatedTasks);
   };
 
+  const DesctructiveModal = () => {
+    return (
+      <DialogContent className="w-72">
+        <DialogHeader>
+          <DialogTitle>Delete Column?</DialogTitle>
+          <DialogDescription>This will delete all tasks</DialogDescription>
+        </DialogHeader>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button size="sm" variant="destructive" onClick={deleteColumn}>
+              Delete
+            </Button>
+          </DialogClose>
+          <DialogClose asChild>
+            <Button size="sm" variant="outline">
+              Cancel
+            </Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    );
+  };
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="h-6 px-2 opacity-0 group-hover:opacity-100 transition-opacity delay-75">
-          ...
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-40">
-        <DropdownMenuGroup>
-          <DropdownMenuItem onSelect={deleteColumn}>
-            <RxTrash className="h-4 w-4 mr-2" />
-            <span>Delete</span>
-          </DropdownMenuItem>
-        </DropdownMenuGroup>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Dialog>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" className="h-6 px-2 opacity-0 group-hover:opacity-100 transition-opacity delay-75">
+            ...
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="w-40">
+          <DropdownMenuGroup>
+            <DialogTrigger asChild>
+              <DropdownMenuItem>
+                <RxTrash className="h-4 w-4 mr-2" />
+                <span>Delete</span>
+              </DropdownMenuItem>
+            </DialogTrigger>
+          </DropdownMenuGroup>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <DesctructiveModal />
+    </Dialog>
   );
 }
