@@ -1,12 +1,9 @@
 "use server";
 
 import createSupabaseServerClient from "@/lib/supabase/serverClient";
+import { redirect } from "next/navigation";
 
-export async function signUpWithEmailAndPassword(data: {
-  email: string;
-  password: string;
-  confirmPassword: string;
-}) {
+export async function signUpWithEmailAndPassword(data: { email: string; password: string; confirmPassword: string }) {
   const supabase = await createSupabaseServerClient();
 
   const { error } = await supabase.auth.signUp({
@@ -19,10 +16,7 @@ export async function signUpWithEmailAndPassword(data: {
   }
 }
 
-export async function signInWithEmailAndPassword(data: {
-  email: string;
-  password: string;
-}) {
+export async function signInWithEmailAndPassword(data: { email: string; password: string }) {
   const supabase = await createSupabaseServerClient();
 
   const { error } = await supabase.auth.signInWithPassword({
@@ -42,15 +36,12 @@ export async function signOut() {
   if (error) {
     throw new Error(`Error with logging out user: ${error}`);
   }
+  redirect("/about");
 }
 
 export async function getUserSession() {
   const supabase = await createSupabaseServerClient();
-  const { data, error } = await supabase.auth.getSession();
-
-  if (error) {
-    throw new Error(`Error while getting user session: ${error}`);
-  }
+  const { data } = await supabase.auth.getUser();
 
   return data;
 }

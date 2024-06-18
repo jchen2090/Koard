@@ -1,27 +1,11 @@
 import LoginForm from "@/components/auth/LoginForm";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
-import { getUserSession } from "@/lib/supabase/actions";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
-import { redirect } from "next/navigation";
 
-export default async function Login() {
-  const { session } = await getUserSession();
-
-  //TODO: Redirect this to home page in the future
-  if (session) {
-    redirect("/");
-  }
-
+export default function Login() {
   return (
     <Card className="flex flex-col w-96 shadow-md">
-      <CardHeader className="text-center text-2xl font-semibold my-2">
-        Authenticate
-      </CardHeader>
+      <CardHeader className="text-center text-2xl font-semibold my-2">Authenticate</CardHeader>
       <CardContent>
         <LoginForm />
       </CardContent>
