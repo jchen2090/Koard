@@ -72,7 +72,7 @@ export default function Task({ taskName, setTasks, id, tasks, columnName }: Task
             <RxTrash className="h-4 w-4 text-destructive" />
           </Button>
         </DialogTrigger>
-        <DialogContent className="w-72">
+        <DialogContent className="w-72" onOpenAutoFocus={(e) => e.preventDefault()}>
           <DialogHeader>
             <DialogTitle>Delete Task?</DialogTitle>
             <DialogDescription>This action is irreversible</DialogDescription>

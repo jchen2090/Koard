@@ -21,7 +21,7 @@ export default function EditColumnDropDown({ tasks, setTasks, columnName }: Colu
 
   const DesctructiveModal = () => {
     return (
-      <DialogContent className="w-72">
+      <DialogContent className="w-72" onOpenAutoFocus={(e) => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle>Delete Column?</DialogTitle>
           <DialogDescription>This will delete all tasks</DialogDescription>

@@ -4,10 +4,11 @@ import { useTheme } from "next-themes";
 import { Button } from "./ui/button";
 import { RxMoon, RxSun } from "react-icons/rx";
 import { useEffect, useState } from "react";
-import { Session } from "@supabase/supabase-js";
+import { User } from "@supabase/supabase-js";
 import { signOut } from "@/lib/supabase/actions";
+import { Skeleton } from "./ui/skeleton";
 
-export default function ThemeToggler({ session }: { session: Session | null }) {
+export default function ThemeToggler({ user }: { user: User | null }) {
   const { theme, setTheme } = useTheme();
   const [isMounted, setIsMounted] = useState(false);
 
@@ -25,24 +26,25 @@ export default function ThemeToggler({ session }: { session: Session | null }) {
     }
   };
 
-  // FIXME: There's a slight delay before this is loaded
-  // Best approach is to display a skeleton of the same size while we wait for this to load
-  return (
-    isMounted && (
+  if (isMounted) {
+    return (
       <div className="flex items-center gap-2">
-        <Button
-          size="icon"
-          onClick={toggleTheme}
-          className="dark:text-white hover:bg-inherit text-black bg-inherit"
-        >
+        <Button size="icon" variant="ghost" onClick={toggleTheme}>
           {theme === "light" ? <RxMoon size={22} /> : <RxSun size={22} />}
         </Button>
-        {session ? (
+        {user && (
           <Button size="sm" onClick={handleSignOut}>
-            Log out{" "}
+            Log out
           </Button>
-        ) : null}
+        )}
       </div>
-    )
+    );
+  }
+
+  return (
+    <div className="flex items-center gap-2">
+      <Skeleton className="h-10 w-10 rounded-md" />
+      {user && <Skeleton className="h-10 rounded-md w-16" />}
+    </div>
   );
 }
