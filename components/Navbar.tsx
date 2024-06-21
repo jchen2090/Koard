@@ -1,10 +1,10 @@
 import Link from "next/link";
 import ThemeToggler from "./ThemeToggler";
 import { getUserSession } from "@/lib/supabase/actions";
-import { Session } from "@supabase/supabase-js";
+import { User } from "@supabase/supabase-js";
 
 export default async function Navbar() {
-  let data: { session: Session | null } = { session: null };
+  let data: { user: User | null } = { user: null };
   try {
     data = await getUserSession();
   } catch (e) {
@@ -18,7 +18,7 @@ export default async function Navbar() {
           Koard
         </Link>
       </nav>
-      <ThemeToggler session={data.session} />
+      <ThemeToggler user={data.user} />
     </div>
   );
 }
