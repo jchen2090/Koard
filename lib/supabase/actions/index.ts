@@ -25,8 +25,9 @@ export async function signInWithEmailAndPassword(data: { email: string; password
   });
 
   if (error) {
-    throw new Error(`Error with logging in user: ${error}`);
+    return { authenticated: false };
   }
+  return { authenticated: true };
 }
 
 export async function signOut() {

@@ -3,18 +3,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { signInWithEmailAndPassword } from "@/lib/supabase/actions";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { LoadingButton } from "../ui/loadingButton";
 
 const formSchema = z.object({
   email: z.string().min(1).email("Not a valid email"),
@@ -22,6 +17,7 @@ const formSchema = z.object({
 });
 
 export default function LoginForm() {
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -32,23 +28,21 @@ export default function LoginForm() {
   });
 
   //TODO: Should route to home page post login
-  //TODO: Toast instead of alert
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      await signInWithEmailAndPassword(values);
+    setIsLoading(true);
+    const { authenticated } = await signInWithEmailAndPassword(values);
+
+    if (authenticated) {
       router.push("/");
-    } catch (e) {
-      alert("Error with server, try again later");
+    } else {
+      form.setError("root", { type: "server", message: "Email or password is incorrect" });
+      setIsLoading(false);
     }
   };
 
   return (
     <Form {...form}>
-      <form
-        className="flex flex-col gap-2"
-        onSubmit={form.handleSubmit(onSubmit)}
-        autoComplete="off"
-      >
+      <form className="flex flex-col gap-2" onSubmit={form.handleSubmit(onSubmit)} autoComplete="off">
         <FormField
           control={form.control}
           name="email"
@@ -75,7 +69,8 @@ export default function LoginForm() {
             </FormItem>
           )}
         />
-        <Button className="mt-2">Log in</Button>
+        {isLoading ? <LoadingButton /> : <Button className="mt-2">Log in</Button>}
+        <div className="text-center text-destructive mt-2">{form.formState.errors.root?.message}</div>
       </form>
     </Form>
   );
