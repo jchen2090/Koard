@@ -3,17 +3,13 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "../ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "../ui/form";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { signUpWithEmailAndPassword } from "../../lib/supabase/actions";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { LoadingButton } from "../ui/loadingButton";
 
 const formSchema = z
   .object({
@@ -29,6 +25,8 @@ const formSchema = z
   );
 
 export default function SignUpForm() {
+  const [isLoading, setIsLoading] = useState(false);
+  const router = useRouter();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -39,10 +37,11 @@ export default function SignUpForm() {
   });
 
   //TODO: Currently 2FA is disabled, will enable someday
-  //TODO: User should be logged in and routed to home page after successful creation
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
+      setIsLoading(true);
       await signUpWithEmailAndPassword(values);
+      router.push("/project");
     } catch (e) {
       alert(`Error with server, try again later`);
     }
@@ -50,11 +49,7 @@ export default function SignUpForm() {
 
   return (
     <Form {...form}>
-      <form
-        className="flex flex-col gap-2"
-        onSubmit={form.handleSubmit(onSubmit)}
-        autoComplete="off"
-      >
+      <form className="flex flex-col gap-2" onSubmit={form.handleSubmit(onSubmit)} autoComplete="off">
         <FormField
           control={form.control}
           name="email"
@@ -94,7 +89,7 @@ export default function SignUpForm() {
             </FormItem>
           )}
         />
-        <Button className="mt-2">Sign up</Button>
+        {isLoading ? <LoadingButton /> : <Button className="mt-2">Log in</Button>}
       </form>
     </Form>
   );
