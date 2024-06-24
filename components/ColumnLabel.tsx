@@ -4,6 +4,7 @@ import { RxChevronRight } from "react-icons/rx";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { ColumnHeaderProps } from "./Column";
+import { columnLabelConfig } from "./ColumnConfig";
 
 export default function ColumnLabel({ tasks, setTasks, columnName }: ColumnHeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -32,7 +33,9 @@ export default function ColumnLabel({ tasks, setTasks, columnName }: ColumnHeade
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button className="text-sm h-6 px-4">{columnName}</Button>
+        <Button className={`text-sm h-6 px-4 ${columnLabelConfig[tasks[columnName].color]} text-black dark:text-white`}>
+          {columnName}
+        </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80">
         <form onSubmit={editColumnName} className="flex gap-2">

@@ -38,7 +38,7 @@ export default function NewTaskButton({ tasks, setTasks, columnName }: NewTaskBu
     };
     setTasks({
       ...tasks,
-      [columnName]: [...tasks[columnName], cardInfo],
+      [columnName]: { ...tasks[columnName], data: [...tasks[columnName].data, cardInfo] },
     });
     form.reset();
     setIsOpen(false);
