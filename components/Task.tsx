@@ -28,7 +28,7 @@ interface TaskProps {
 export default function Task({ taskName, setTasks, id, tasks, columnName }: TaskProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [newTaskName, setNewTaskName] = useState(taskName);
-  const tasksInColumn = tasks[columnName];
+  const tasksInColumn = tasks[columnName].data;
 
   const editTaskName = () => {
     setIsEditing(true);
@@ -41,12 +41,12 @@ export default function Task({ taskName, setTasks, id, tasks, columnName }: Task
       throw new Error("Task does not exist");
     }
     taskToEdit.taskName = newTaskName;
-    setTasks({ ...tasks, [columnName]: tasksInColumn });
+    setTasks({ ...tasks, [columnName]: { ...tasks[columnName], data: tasksInColumn } });
   };
 
   const deleteTask = () => {
     const updatedTasks = tasksInColumn.filter((task) => task.id !== id);
-    setTasks({ ...tasks, [columnName]: updatedTasks });
+    setTasks({ ...tasks, [columnName]: { ...tasks[columnName], data: updatedTasks } });
   };
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {

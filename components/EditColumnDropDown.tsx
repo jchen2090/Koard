@@ -6,17 +6,33 @@ import {
   DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuGroup,
+  DropdownMenuSeparator,
+  DropdownMenuLabel,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
 } from "./ui/dropdown-menu";
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogClose } from "./ui/dialog";
 import { ColumnHeaderProps } from "./Column";
 import { DialogHeader, DialogFooter } from "./ui/dialog";
+import { useState } from "react";
+import { columnDropdownConfig } from "./ColumnConfig";
 
 export default function EditColumnDropDown({ tasks, setTasks, columnName }: ColumnHeaderProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [color, setColor] = useState(tasks[columnName].color);
+
   const deleteColumn = () => {
     // Need to make a deep copy in order for react to rerender
     const updatedTasks = JSON.parse(JSON.stringify(tasks));
     delete updatedTasks[columnName];
     setTasks(updatedTasks);
+  };
+
+  const updateColumnColor = (e: any) => {
+    e.preventDefault();
+    const newColor = e.target.textContent;
+
+    setTasks({ ...tasks, [columnName]: { ...tasks[columnName], color: newColor } });
   };
 
   const DesctructiveModal = () => {
@@ -42,9 +58,20 @@ export default function EditColumnDropDown({ tasks, setTasks, columnName }: Colu
     );
   };
 
+  const ColorOptions = () => {
+    const colors = Object.keys(columnDropdownConfig);
+
+    return colors.map((color, idx) => (
+      <DropdownMenuRadioItem key={idx} value={color} onSelect={updateColumnColor}>
+        <div className={`h-4 w-4 mr-2 rounded-sm ${columnDropdownConfig[color]}`} />
+        <span>{color}</span>
+      </DropdownMenuRadioItem>
+    ));
+  };
+
   return (
     <Dialog>
-      <DropdownMenu>
+      <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-6 px-2 opacity-0 group-hover:opacity-100 transition-opacity delay-75">
             ...
@@ -59,6 +86,11 @@ export default function EditColumnDropDown({ tasks, setTasks, columnName }: Colu
               </DropdownMenuItem>
             </DialogTrigger>
           </DropdownMenuGroup>
+          <DropdownMenuSeparator />
+          <DropdownMenuRadioGroup value={color} onValueChange={setColor}>
+            <DropdownMenuLabel className="text-xs ">Colors</DropdownMenuLabel>
+            <ColorOptions />
+          </DropdownMenuRadioGroup>
         </DropdownMenuContent>
       </DropdownMenu>
       <DesctructiveModal />

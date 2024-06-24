@@ -11,47 +11,61 @@ export interface TaskSchema {
   taskDesc: string;
 }
 
+interface ColumnSchema {
+  data: TaskSchema[];
+  color: string;
+}
+
 export interface DataSchema {
-  [key: string]: TaskSchema[];
+  [key: string]: ColumnSchema;
 }
 
 const sampleTasks: DataSchema = {
-  "Sample Data": [
-    {
-      id: "0",
-      taskName: "Sample name 1",
-      taskDesc: "Sample desc 1",
-    },
-    {
-      id: "1",
-      taskName: "Sample name 2",
-      taskDesc: "Sample desc 2",
-    },
-    {
-      id: "4",
-      taskName: "Sample name 5",
-      taskDesc: "Sample desc 5",
-    },
-  ],
-  "Sample Data 3": [
-    {
-      id: "2",
-      taskName: "Sample name 3",
-      taskDesc: "Sample desc 3",
-    },
-    {
-      id: "5",
-      taskName: "Sample name 6",
-      taskDesc: "Sample desc 6",
-    },
-  ],
-  "Sample Data 4": [
-    {
-      id: "3",
-      taskName: "Sample name 4",
-      taskDesc: "Sample desc 4",
-    },
-  ],
+  "Sample Data": {
+    data: [
+      {
+        id: "0",
+        taskName: "Sample name 1",
+        taskDesc: "Sample desc 1",
+      },
+      {
+        id: "1",
+        taskName: "Sample name 2",
+        taskDesc: "Sample desc 2",
+      },
+      {
+        id: "4",
+        taskName: "Sample name 5",
+        taskDesc: "Sample desc 5",
+      },
+    ],
+    color: "Red",
+  },
+  "Sample Data 3": {
+    data: [
+      {
+        id: "2",
+        taskName: "Sample name 3",
+        taskDesc: "Sample desc 3",
+      },
+      {
+        id: "5",
+        taskName: "Sample name 6",
+        taskDesc: "Sample desc 6",
+      },
+    ],
+    color: "Gray",
+  },
+  "Sample Data 4": {
+    data: [
+      {
+        id: "3",
+        taskName: "Sample name 4",
+        taskDesc: "Sample desc 4",
+      },
+    ],
+    color: "Blue",
+  },
 };
 
 export default function Project() {
@@ -64,6 +78,8 @@ export default function Project() {
     if (!destination) {
       return;
     }
+    const newColumn = destination.droppableId;
+    const oldColumn = source.droppableId;
 
     /**
      * Check to see if user is trying to change columns or change order
@@ -71,10 +87,9 @@ export default function Project() {
      * if droppableIds are the same then it is the latter
      */
     if (source.droppableId !== destination.droppableId) {
-      const newColumn = destination.droppableId;
-      const dataToMove = tasks[source.droppableId][source.index];
-      const newColumnData = tasks[newColumn];
-      const updatedOldColumn = tasks[source.droppableId];
+      const dataToMove = tasks[oldColumn].data[source.index];
+      const newColumnData = tasks[newColumn].data;
+      const updatedOldColumn = tasks[oldColumn].data;
 
       updatedOldColumn.splice(source.index, 1);
 
@@ -84,18 +99,18 @@ export default function Project() {
 
       setTasks({
         ...tasks,
-        [source.droppableId]: updatedOldColumn,
-        [destination.droppableId]: updatedNewColumnData,
+        [oldColumn]: { ...tasks[oldColumn], data: updatedOldColumn },
+        [newColumn]: { ...tasks[newColumn], data: updatedNewColumnData },
       });
     } else {
-      const reOrderedColumn = tasks[source.droppableId];
+      const reOrderedColumn = tasks[source.droppableId].data;
       const oldIndex = source.index;
       const newIndex = destination.index;
 
       const [removedValue] = reOrderedColumn.splice(oldIndex, 1);
       reOrderedColumn.splice(newIndex, 0, removedValue);
 
-      setTasks({ ...tasks, [source.droppableId]: reOrderedColumn });
+      setTasks({ ...tasks, [oldColumn]: { ...tasks[oldColumn], data: reOrderedColumn } });
     }
   };
 

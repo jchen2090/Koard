@@ -20,7 +20,7 @@ export interface ColumnHeaderProps {
 }
 
 export default function Column({ tasks, idx, columnName, setTasks }: ColumnProps) {
-  const taskData = tasks[columnName];
+  const taskData = tasks[columnName].data;
 
   return (
     <div key={idx} className="p-2 min-w-72">

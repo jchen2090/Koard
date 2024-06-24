@@ -29,7 +29,7 @@ export default function NewColumnButton({ tasks, setTasks }: NewColumnButtonProp
 
   const createNewColumn = (values: z.infer<typeof formSchema>) => {
     const { columnName } = values;
-    setTasks({ ...tasks, [columnName]: [] });
+    setTasks({ ...tasks, [columnName]: { data: [], color: "Gray" } });
     setIsOpen(false);
   };
 
