@@ -1,26 +1,25 @@
 import { ChangeEvent, FormEvent, useState } from "react";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { RxChevronRight } from "react-icons/rx";
-import { Button } from "./ui/button";
-import { Input } from "./ui/input";
+import { Button } from "../ui/button";
+import { Input } from "../ui/input";
 import { ColumnHeaderProps } from "./Column";
 import { columnLabelConfig } from "./ColumnConfig";
 
-export default function ColumnLabel({ tasks, setTasks, columnName }: ColumnHeaderProps) {
+export default function ColumnLabel({ tasks, setTasks, column, columnName }: ColumnHeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [newColumnName, setNewColumnName] = useState(columnName);
 
   const editColumnName = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!newColumnName) {
+    if (!newColumnName || newColumnName === columnName) {
       setIsOpen(false);
       return;
     }
     // Need to make a deep copy in order for react to rerender
     const updatedData = JSON.parse(JSON.stringify(tasks));
-    updatedData[newColumnName] = tasks[columnName];
-    delete updatedData[columnName];
+    updatedData[column].columnName = newColumnName;
 
     setTasks(updatedData);
     setIsOpen(false);
@@ -33,7 +32,7 @@ export default function ColumnLabel({ tasks, setTasks, columnName }: ColumnHeade
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button className={`text-sm h-6 px-4 ${columnLabelConfig[tasks[columnName].color]} text-black dark:text-white`}>
+        <Button className={`text-sm h-6 px-4 ${columnLabelConfig[tasks[column].color]} text-black dark:text-white`}>
           {columnName}
         </Button>
       </PopoverTrigger>

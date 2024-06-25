@@ -1,32 +1,33 @@
 import { Draggable, Droppable } from "@hello-pangea/dnd";
 import Task from "./Task";
-import { DataSchema } from "@/app/project/page";
+import { ColumnSchema } from "@/app/project/page";
 import { Dispatch, SetStateAction } from "react";
 import NewTaskButton from "./NewTaskButton";
 import ColumnLabel from "./ColumnLabel";
 import EditColumnDropDown from "./EditColumnDropDown";
 
 interface ColumnProps {
-  tasks: DataSchema;
-  idx: number;
-  columnName: string;
-  setTasks: Dispatch<SetStateAction<DataSchema>>;
+  tasks: ColumnSchema[];
+  columnIdx: number;
+  setTasks: Dispatch<SetStateAction<ColumnSchema[]>>;
 }
 
 export interface ColumnHeaderProps {
-  tasks: DataSchema;
-  setTasks: Dispatch<SetStateAction<DataSchema>>;
+  tasks: ColumnSchema[];
+  setTasks: Dispatch<SetStateAction<ColumnSchema[]>>;
   columnName: string;
+  column: number;
 }
 
-export default function Column({ tasks, idx, columnName, setTasks }: ColumnProps) {
-  const taskData = tasks[columnName].data;
+export default function Column({ tasks, columnIdx, setTasks }: ColumnProps) {
+  const taskData = tasks[columnIdx].data;
+  const { columnName } = tasks[columnIdx];
 
   return (
-    <div key={idx} className="p-2 min-w-72">
+    <div className="p-2 min-w-72">
       <span className="flex justify-between items-center group mb-2">
-        <ColumnLabel tasks={tasks} setTasks={setTasks} columnName={columnName} />
-        <EditColumnDropDown tasks={tasks} setTasks={setTasks} columnName={columnName} />
+        <ColumnLabel tasks={tasks} setTasks={setTasks} column={columnIdx} columnName={columnName} />
+        <EditColumnDropDown tasks={tasks} setTasks={setTasks} column={columnIdx} columnName={columnName} />
       </span>
       <Droppable droppableId={columnName}>
         {(provided) => (
@@ -41,14 +42,14 @@ export default function Column({ tasks, idx, columnName, setTasks }: ColumnProps
                       tasks={tasks}
                       setTasks={setTasks}
                       id={task.id}
-                      columnName={columnName}
+                      columnIdx={columnIdx}
                     />
                   </div>
                 )}
               </Draggable>
             ))}
             {provided.placeholder}
-            <NewTaskButton tasks={tasks} setTasks={setTasks} columnName={columnName} />
+            <NewTaskButton tasks={tasks} setTasks={setTasks} columnIdx={columnIdx} />
           </div>
         )}
       </Droppable>

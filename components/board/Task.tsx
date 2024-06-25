@@ -1,10 +1,10 @@
 import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useState } from "react";
-import { Button } from "./ui/button";
-import { Card, CardTitle } from "./ui/card";
+import { Button } from "../ui/button";
+import { Card, CardTitle } from "../ui/card";
 import { RxPencil2 } from "react-icons/rx";
 import { RxTrash } from "react-icons/rx";
-import { Input } from "./ui/input";
-import { DataSchema } from "@/app/project/page";
+import { Input } from "../ui/input";
+import { ColumnSchema } from "@/app/project/page";
 import {
   Dialog,
   DialogHeader,
@@ -13,22 +13,23 @@ import {
   DialogDescription,
   DialogTrigger,
   DialogFooter,
-} from "./ui/dialog";
+} from "../ui/dialog";
 import { DialogClose } from "@radix-ui/react-dialog";
 
 interface TaskProps {
   taskName: string;
   taskDesc: string;
-  tasks: DataSchema;
+  tasks: ColumnSchema[];
   id: string;
-  setTasks: Dispatch<SetStateAction<DataSchema>>;
-  columnName: string;
+  setTasks: Dispatch<SetStateAction<ColumnSchema[]>>;
+  columnIdx: number;
 }
 
-export default function Task({ taskName, setTasks, id, tasks, columnName }: TaskProps) {
+export default function Task({ taskName, setTasks, id, tasks, columnIdx }: TaskProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [newTaskName, setNewTaskName] = useState(taskName);
-  const tasksInColumn = tasks[columnName].data;
+  const tasksInColumn = tasks[columnIdx].data;
+  const updatedTasks = [...tasks];
 
   const editTaskName = () => {
     setIsEditing(true);
@@ -41,12 +42,14 @@ export default function Task({ taskName, setTasks, id, tasks, columnName }: Task
       throw new Error("Task does not exist");
     }
     taskToEdit.taskName = newTaskName;
-    setTasks({ ...tasks, [columnName]: { ...tasks[columnName], data: tasksInColumn } });
+    updatedTasks[columnIdx].data = tasksInColumn;
+    setTasks(updatedTasks);
   };
 
   const deleteTask = () => {
-    const updatedTasks = tasksInColumn.filter((task) => task.id !== id);
-    setTasks({ ...tasks, [columnName]: { ...tasks[columnName], data: updatedTasks } });
+    const otherTasks = tasksInColumn.filter((task) => task.id !== id);
+    updatedTasks[columnIdx].data = otherTasks;
+    setTasks(updatedTasks);
   };
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
