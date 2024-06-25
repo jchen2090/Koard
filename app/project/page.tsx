@@ -11,17 +11,15 @@ export interface TaskSchema {
   taskDesc: string;
 }
 
-interface ColumnSchema {
+export interface ColumnSchema {
+  columnName: string;
   data: TaskSchema[];
   color: string;
 }
 
-export interface DataSchema {
-  [key: string]: ColumnSchema;
-}
-
-const sampleTasks: DataSchema = {
-  "Sample Data": {
+const sampleTasks: ColumnSchema[] = [
+  {
+    columnName: "Sample Data",
     data: [
       {
         id: "0",
@@ -41,7 +39,8 @@ const sampleTasks: DataSchema = {
     ],
     color: "Red",
   },
-  "Sample Data 3": {
+  {
+    columnName: "Sample Data 2",
     data: [
       {
         id: "2",
@@ -56,7 +55,8 @@ const sampleTasks: DataSchema = {
     ],
     color: "Gray",
   },
-  "Sample Data 4": {
+  {
+    columnName: "Sample Data 3",
     data: [
       {
         id: "3",
@@ -66,12 +66,12 @@ const sampleTasks: DataSchema = {
     ],
     color: "Blue",
   },
-};
+];
 
 export default function Project() {
   const [tasks, setTasks] = useState(sampleTasks);
-  const columns = Object.keys(tasks);
 
+  //TODO: Minor optimizations potentially needed here
   const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
 
@@ -80,6 +80,8 @@ export default function Project() {
     }
     const newColumn = destination.droppableId;
     const oldColumn = source.droppableId;
+    const oldColumnIdx = tasks.findIndex((task) => task.columnName === oldColumn);
+    const newColumnIdx = tasks.findIndex((task) => task.columnName === newColumn);
 
     /**
      * Check to see if user is trying to change columns or change order
@@ -87,9 +89,9 @@ export default function Project() {
      * if droppableIds are the same then it is the latter
      */
     if (source.droppableId !== destination.droppableId) {
-      const dataToMove = tasks[oldColumn].data[source.index];
-      const newColumnData = tasks[newColumn].data;
-      const updatedOldColumn = tasks[oldColumn].data;
+      const dataToMove = tasks[oldColumnIdx].data[source.index];
+      const newColumnData = tasks[newColumnIdx].data;
+      const updatedOldColumn = tasks[oldColumnIdx].data;
 
       updatedOldColumn.splice(source.index, 1);
 
@@ -97,28 +99,29 @@ export default function Project() {
       const secondHalf = newColumnData.slice(destination.index);
       const updatedNewColumnData = [...firstHalf, dataToMove, ...secondHalf];
 
-      setTasks({
-        ...tasks,
-        [oldColumn]: { ...tasks[oldColumn], data: updatedOldColumn },
-        [newColumn]: { ...tasks[newColumn], data: updatedNewColumnData },
-      });
+      const updatedTasks = [...tasks];
+      updatedTasks[oldColumnIdx].data = updatedOldColumn;
+      updatedTasks[newColumnIdx].data = updatedNewColumnData;
+      setTasks(updatedTasks);
     } else {
-      const reOrderedColumn = tasks[source.droppableId].data;
+      const reOrderedColumn = tasks[oldColumnIdx].data;
       const oldIndex = source.index;
       const newIndex = destination.index;
 
       const [removedValue] = reOrderedColumn.splice(oldIndex, 1);
       reOrderedColumn.splice(newIndex, 0, removedValue);
 
-      setTasks({ ...tasks, [oldColumn]: { ...tasks[oldColumn], data: reOrderedColumn } });
+      const updatedTasks = [...tasks];
+      updatedTasks[oldColumnIdx].data = reOrderedColumn;
+      setTasks(updatedTasks);
     }
   };
 
   return (
     <div className="flex flex-row gap-4 w-auto">
       <DragDropContext onDragEnd={onDragEnd}>
-        {columns.map((columnName, idx) => (
-          <Column tasks={tasks} setTasks={setTasks} idx={idx} columnName={columnName} key={idx} />
+        {tasks.map((_, idx) => (
+          <Column tasks={tasks} setTasks={setTasks} columnIdx={idx} key={idx} />
         ))}
       </DragDropContext>
       <NewColumnButton tasks={tasks} setTasks={setTasks} />

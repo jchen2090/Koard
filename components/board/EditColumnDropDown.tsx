@@ -17,22 +17,23 @@ import { DialogHeader, DialogFooter } from "../ui/dialog";
 import { useState } from "react";
 import { columnDropdownConfig } from "./ColumnConfig";
 
-export default function EditColumnDropDown({ tasks, setTasks, columnName }: ColumnHeaderProps) {
+export default function EditColumnDropDown({ tasks, setTasks, column }: ColumnHeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [color, setColor] = useState(tasks[columnName].color);
+  const [color, setColor] = useState(tasks[column].color);
 
   const deleteColumn = () => {
-    // Need to make a deep copy in order for react to rerender
-    const updatedTasks = JSON.parse(JSON.stringify(tasks));
-    delete updatedTasks[columnName];
-    setTasks(updatedTasks);
+    const firstHalf = tasks.slice(0, column);
+    const secondHalf = tasks.slice(column);
+    setTasks([...firstHalf, ...secondHalf]);
   };
 
   const updateColumnColor = (e: any) => {
     e.preventDefault();
     const newColor = e.target.textContent;
+    const updatedTasks = [...tasks];
+    updatedTasks[column].color = newColor;
 
-    setTasks({ ...tasks, [columnName]: { ...tasks[columnName], color: newColor } });
+    setTasks(updatedTasks);
   };
 
   const DesctructiveModal = () => {

@@ -5,7 +5,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem } from "../ui/form";
-import { DataSchema, TaskSchema } from "@/app/project/page";
+import { ColumnSchema, TaskSchema } from "@/app/project/page";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Input } from "../ui/input";
 
@@ -14,12 +14,12 @@ const formSchema = z.object({
 });
 
 interface NewTaskButtonProps {
-  tasks: DataSchema;
-  setTasks: Dispatch<SetStateAction<DataSchema>>;
-  columnName: string;
+  tasks: ColumnSchema[];
+  setTasks: Dispatch<SetStateAction<ColumnSchema[]>>;
+  columnIdx: number;
 }
 
-export default function NewTaskButton({ tasks, setTasks, columnName }: NewTaskButtonProps) {
+export default function NewTaskButton({ tasks, setTasks, columnIdx }: NewTaskButtonProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -36,10 +36,9 @@ export default function NewTaskButton({ tasks, setTasks, columnName }: NewTaskBu
       taskName: taskName,
       taskDesc: "test",
     };
-    setTasks({
-      ...tasks,
-      [columnName]: { ...tasks[columnName], data: [...tasks[columnName].data, cardInfo] },
-    });
+    const updatedTasks = [...tasks];
+    updatedTasks[columnIdx].data = [...tasks[columnIdx].data, cardInfo];
+    setTasks(updatedTasks);
     form.reset();
     setIsOpen(false);
   };
