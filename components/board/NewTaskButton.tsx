@@ -4,10 +4,10 @@ import { z } from "zod";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormControl, FormField, FormItem } from "./ui/form";
+import { Form, FormControl, FormField, FormItem } from "../ui/form";
 import { DataSchema, TaskSchema } from "@/app/project/page";
 import { Dispatch, SetStateAction, useState } from "react";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 
 const formSchema = z.object({
   taskName: z.string(),

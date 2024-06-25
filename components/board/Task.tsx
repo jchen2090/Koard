@@ -1,9 +1,9 @@
 import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useState } from "react";
-import { Button } from "./ui/button";
-import { Card, CardTitle } from "./ui/card";
+import { Button } from "../ui/button";
+import { Card, CardTitle } from "../ui/card";
 import { RxPencil2 } from "react-icons/rx";
 import { RxTrash } from "react-icons/rx";
-import { Input } from "./ui/input";
+import { Input } from "../ui/input";
 import { DataSchema } from "@/app/project/page";
 import {
   Dialog,
@@ -13,7 +13,7 @@ import {
   DialogDescription,
   DialogTrigger,
   DialogFooter,
-} from "./ui/dialog";
+} from "../ui/dialog";
 import { DialogClose } from "@radix-ui/react-dialog";
 
 interface TaskProps {

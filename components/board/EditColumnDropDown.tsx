@@ -1,5 +1,5 @@
 import { RxTrash } from "react-icons/rx";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import {
   DropdownMenu,
   DropdownMenuItem,
@@ -10,10 +10,10 @@ import {
   DropdownMenuLabel,
   DropdownMenuRadioGroup,
   DropdownMenuRadioItem,
-} from "./ui/dropdown-menu";
-import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogClose } from "./ui/dialog";
+} from "../ui/dropdown-menu";
+import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogClose } from "../ui/dialog";
 import { ColumnHeaderProps } from "./Column";
-import { DialogHeader, DialogFooter } from "./ui/dialog";
+import { DialogHeader, DialogFooter } from "../ui/dialog";
 import { useState } from "react";
 import { columnDropdownConfig } from "./ColumnConfig";
 

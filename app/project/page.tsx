@@ -1,7 +1,7 @@
 "use client";
 
-import Column from "@/components/Column";
-import NewColumnButton from "@/components/NewColumnButton";
+import Column from "@/components/board/Column";
+import NewColumnButton from "@/components/board/NewColumnButton";
 import { DragDropContext, DropResult } from "@hello-pangea/dnd";
 import { useState } from "react";
 

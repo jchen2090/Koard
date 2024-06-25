@@ -1,13 +1,13 @@
 import { RxChevronRight, RxPlus } from "react-icons/rx";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import { DataSchema } from "@/app/project/page";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@radix-ui/react-popover";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { Form, FormField, FormItem, FormControl } from "./ui/form";
-import { Input } from "./ui/input";
+import { Form, FormField, FormItem, FormControl } from "../ui/form";
+import { Input } from "../ui/input";
 
 interface NewColumnButtonProps {
   tasks: DataSchema;
