@@ -3,9 +3,19 @@ import { createClient } from "./lib/supabase/middleware";
 
 export async function middleware(request: NextRequest) {
   const { supabase, response } = createClient(request);
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  let authenticated: boolean;
+
+  if (process.env.APP_ENV === "dev") {
+    authenticated = true;
+  } else if (process.env.APP_ENV === "prod") {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    authenticated = !!user;
+  } else {
+    throw new Error("APP_ENV Not specified in .env");
+  }
 
   // Public Pages
   if (request.nextUrl.pathname.startsWith("/about")) {
@@ -13,7 +23,7 @@ export async function middleware(request: NextRequest) {
   }
 
   // Protected Pages
-  if (!user) {
+  if (!authenticated) {
     if (request.nextUrl.pathname.startsWith("/login")) {
       return response;
     }
