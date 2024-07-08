@@ -1,6 +1,6 @@
 import { RxChevronRight, RxPlus } from "react-icons/rx";
 import { Button } from "../ui/button";
-import { ColumnSchema } from "@/app/project/page";
+import { DataSchema } from "@/app/project/page";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@radix-ui/react-popover";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -10,8 +10,8 @@ import { Form, FormField, FormItem, FormControl } from "../ui/form";
 import { Input } from "../ui/input";
 
 interface NewColumnButtonProps {
-  tasks: ColumnSchema[];
-  setTasks: Dispatch<SetStateAction<ColumnSchema[]>>;
+  tasks: DataSchema[];
+  setTasks: Dispatch<SetStateAction<DataSchema[]>>;
 }
 
 const formSchema = z.object({
@@ -29,9 +29,9 @@ export default function NewColumnButton({ tasks, setTasks }: NewColumnButtonProp
 
   const createNewColumn = (values: z.infer<typeof formSchema>) => {
     const { columnName } = values;
-    const newColumn: ColumnSchema = {
-      columnName: columnName,
-      data: [],
+    const newColumn: DataSchema = {
+      column_name: columnName,
+      cards: [],
       color: "Gray",
     };
     setTasks([...tasks, newColumn]);

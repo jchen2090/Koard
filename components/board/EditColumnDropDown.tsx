@@ -23,7 +23,7 @@ export default function EditColumnDropDown({ tasks, setTasks, column }: ColumnHe
 
   const deleteColumn = () => {
     const firstHalf = tasks.slice(0, column);
-    const secondHalf = tasks.slice(column);
+    const secondHalf = tasks.slice(column + 1);
     setTasks([...firstHalf, ...secondHalf]);
   };
 
@@ -38,7 +38,7 @@ export default function EditColumnDropDown({ tasks, setTasks, column }: ColumnHe
 
   const DesctructiveModal = () => {
     return (
-      <DialogContent className="w-72" onOpenAutoFocus={(e) => e.preventDefault()}>
+      <DialogContent className="w-72">
         <DialogHeader>
           <DialogTitle>Delete Column?</DialogTitle>
           <DialogDescription>This will delete all tasks</DialogDescription>

@@ -4,7 +4,7 @@ import { Card, CardTitle } from "../ui/card";
 import { RxPencil2 } from "react-icons/rx";
 import { RxTrash } from "react-icons/rx";
 import { Input } from "../ui/input";
-import { ColumnSchema } from "@/app/project/page";
+import { DataSchema } from "@/app/project/page";
 import {
   Dialog,
   DialogHeader,
@@ -19,16 +19,16 @@ import { DialogClose } from "@radix-ui/react-dialog";
 interface TaskProps {
   taskName: string;
   taskDesc: string;
-  tasks: ColumnSchema[];
+  tasks: DataSchema[];
   id: string;
-  setTasks: Dispatch<SetStateAction<ColumnSchema[]>>;
+  setTasks: Dispatch<SetStateAction<DataSchema[]>>;
   columnIdx: number;
 }
 
 export default function Task({ taskName, setTasks, id, tasks, columnIdx }: TaskProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [newTaskName, setNewTaskName] = useState(taskName);
-  const tasksInColumn = tasks[columnIdx].data;
+  const tasksInColumn = tasks[columnIdx].cards;
   const updatedTasks = [...tasks];
 
   const editTaskName = () => {
@@ -36,19 +36,19 @@ export default function Task({ taskName, setTasks, id, tasks, columnIdx }: TaskP
   };
 
   const changeTaskName = () => {
-    const taskToEdit = tasksInColumn.filter((task) => task.id === id)?.at(0);
+    const taskToEdit = tasksInColumn.filter((task) => task.card_id === id)?.at(0);
 
     if (!taskToEdit) {
       throw new Error("Task does not exist");
     }
-    taskToEdit.taskName = newTaskName;
-    updatedTasks[columnIdx].data = tasksInColumn;
+    taskToEdit.card_name = newTaskName;
+    updatedTasks[columnIdx].cards = tasksInColumn;
     setTasks(updatedTasks);
   };
 
   const deleteTask = () => {
-    const otherTasks = tasksInColumn.filter((task) => task.id !== id);
-    updatedTasks[columnIdx].data = otherTasks;
+    const otherTasks = tasksInColumn.filter((task) => task.card_id !== id);
+    updatedTasks[columnIdx].cards = otherTasks;
     setTasks(updatedTasks);
   };
 
@@ -75,7 +75,7 @@ export default function Task({ taskName, setTasks, id, tasks, columnIdx }: TaskP
             <RxTrash className="h-4 w-4 text-destructive" />
           </Button>
         </DialogTrigger>
-        <DialogContent className="w-72" onOpenAutoFocus={(e) => e.preventDefault()}>
+        <DialogContent className="w-72">
           <DialogHeader>
             <DialogTitle>Delete Task?</DialogTitle>
             <DialogDescription>This action is irreversible</DialogDescription>
