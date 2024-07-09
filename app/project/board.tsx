@@ -3,15 +3,22 @@
 import Column from "@/components/board/Column";
 import NewColumnButton from "@/components/board/NewColumnButton";
 import { DropResult, DragDropContext } from "@hello-pangea/dnd";
-import { useState } from "react";
+import { useEffect } from "react";
 import { DataSchema } from "./page";
+import { useAppContext } from "@/components/providers/contextProvider";
+import { ActionType } from "@/reducers/actions";
 
 interface BoardProps {
   data: DataSchema[];
 }
 
 export default function Board({ data }: BoardProps) {
-  const [tasks, setTasks] = useState(data);
+  const { state, dispatch } = useAppContext();
+  const { data: tasks } = state;
+
+  useEffect(() => {
+    dispatch({ type: ActionType.SET_DATA, payload: data });
+  }, [data, dispatch]);
 
   //TODO: Minor optimizations potentially needed here
   const onDragEnd = (result: DropResult) => {
@@ -44,7 +51,7 @@ export default function Board({ data }: BoardProps) {
       const updatedTasks = [...tasks];
       updatedTasks[oldColumnIdx].cards = updatedOldColumn;
       updatedTasks[newColumnIdx].cards = updatedNewColumnData;
-      setTasks(updatedTasks);
+      dispatch({ type: ActionType.SET_DATA, payload: updatedTasks });
     } else {
       const reOrderedColumn = tasks[oldColumnIdx].cards;
       const oldIndex = source.index;
@@ -55,7 +62,7 @@ export default function Board({ data }: BoardProps) {
 
       const updatedTasks = [...tasks];
       updatedTasks[oldColumnIdx].cards = reOrderedColumn;
-      setTasks(updatedTasks);
+      dispatch({ type: ActionType.SET_DATA, payload: updatedTasks });
     }
   };
 
@@ -63,10 +70,10 @@ export default function Board({ data }: BoardProps) {
     <div className="flex flex-row gap-4 w-auto">
       <DragDropContext onDragEnd={onDragEnd}>
         {tasks.map((_, idx) => (
-          <Column tasks={tasks} setTasks={setTasks} columnIdx={idx} key={idx} />
+          <Column columnIdx={idx} key={idx} />
         ))}
       </DragDropContext>
-      <NewColumnButton tasks={tasks} setTasks={setTasks} />
+      <NewColumnButton />
     </div>
   );
 }

@@ -1,25 +1,23 @@
 import { RxChevronRight, RxPlus } from "react-icons/rx";
 import { Button } from "../ui/button";
 import { DataSchema } from "@/app/project/page";
-import { Dispatch, SetStateAction, useState } from "react";
+import { useState } from "react";
 import { Popover, PopoverContent, PopoverTrigger } from "@radix-ui/react-popover";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Form, FormField, FormItem, FormControl } from "../ui/form";
 import { Input } from "../ui/input";
-
-interface NewColumnButtonProps {
-  tasks: DataSchema[];
-  setTasks: Dispatch<SetStateAction<DataSchema[]>>;
-}
+import { useAppContext } from "../providers/contextProvider";
+import { ActionType } from "@/reducers/actions";
 
 const formSchema = z.object({
   columnName: z.string(),
 });
 
-export default function NewColumnButton({ tasks, setTasks }: NewColumnButtonProps) {
+export default function NewColumnButton() {
   const [isOpen, setIsOpen] = useState(false);
+  const { dispatch } = useAppContext();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,7 +32,7 @@ export default function NewColumnButton({ tasks, setTasks }: NewColumnButtonProp
       cards: [],
       color: "Gray",
     };
-    setTasks([...tasks, newColumn]);
+    dispatch({ type: ActionType.ADD_COLUMN, payload: newColumn });
     setIsOpen(false);
   };
 

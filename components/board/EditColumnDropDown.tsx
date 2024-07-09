@@ -16,24 +16,23 @@ import { ColumnHeaderProps } from "./Column";
 import { DialogHeader, DialogFooter } from "../ui/dialog";
 import { useState } from "react";
 import { columnDropdownConfig } from "./ColumnConfig";
+import { useAppContext } from "../providers/contextProvider";
+import { ActionType } from "@/reducers/actions";
 
-export default function EditColumnDropDown({ tasks, setTasks, column }: ColumnHeaderProps) {
+export default function EditColumnDropDowCn({ column }: ColumnHeaderProps) {
+  const { state, dispatch } = useAppContext();
   const [isOpen, setIsOpen] = useState(false);
-  const [color, setColor] = useState(tasks[column].color);
+  const [color, setColor] = useState(state.data[column].color);
 
   const deleteColumn = () => {
-    const firstHalf = tasks.slice(0, column);
-    const secondHalf = tasks.slice(column + 1);
-    setTasks([...firstHalf, ...secondHalf]);
+    dispatch({ type: ActionType.DELETE_COLUMN, payload: { column: column } });
   };
 
   const updateColumnColor = (e: any) => {
     e.preventDefault();
     const newColor = e.target.textContent;
-    const updatedTasks = [...tasks];
-    updatedTasks[column].color = newColor;
 
-    setTasks(updatedTasks);
+    dispatch({ type: ActionType.UPDATE_COLUMN_COLOR, payload: { column: column, newColor: newColor } });
   };
 
   const DesctructiveModal = () => {

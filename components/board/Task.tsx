@@ -1,10 +1,9 @@
-import { ChangeEvent, Dispatch, FormEvent, SetStateAction, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 import { Button } from "../ui/button";
 import { Card, CardTitle } from "../ui/card";
 import { RxPencil2 } from "react-icons/rx";
 import { RxTrash } from "react-icons/rx";
 import { Input } from "../ui/input";
-import { DataSchema } from "@/app/project/page";
 import {
   Dialog,
   DialogHeader,
@@ -15,45 +14,44 @@ import {
   DialogFooter,
 } from "../ui/dialog";
 import { DialogClose } from "@radix-ui/react-dialog";
+import { useAppContext } from "../providers/contextProvider";
+import { ActionType } from "@/reducers/actions";
 
 interface TaskProps {
   taskName: string;
   taskDesc: string;
-  tasks: DataSchema[];
   id: string;
-  setTasks: Dispatch<SetStateAction<DataSchema[]>>;
   columnIdx: number;
 }
 
-export default function Task({ taskName, setTasks, id, tasks, columnIdx }: TaskProps) {
+export default function Task({ taskName, id, columnIdx }: TaskProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const [newTaskName, setNewTaskName] = useState(taskName);
-  const tasksInColumn = tasks[columnIdx].cards;
-  const updatedTasks = [...tasks];
+  const [newCardName, setNewCardName] = useState(taskName);
+  const { state, dispatch } = useAppContext();
+  const { cards: cardsInColumn } = state.data[columnIdx];
 
   const editTaskName = () => {
     setIsEditing(true);
   };
 
   const changeTaskName = () => {
-    const taskToEdit = tasksInColumn.filter((task) => task.card_id === id)?.at(0);
+    const cardToEdit = cardsInColumn.findIndex((card) => card.card_id === id);
 
-    if (!taskToEdit) {
-      throw new Error("Task does not exist");
-    }
-    taskToEdit.card_name = newTaskName;
-    updatedTasks[columnIdx].cards = tasksInColumn;
-    setTasks(updatedTasks);
+    dispatch({
+      type: ActionType.CHANGE_CARD_NAME,
+      payload: { cardToEdit: cardToEdit, newName: newCardName, column: columnIdx },
+    });
   };
 
   const deleteTask = () => {
-    const otherTasks = tasksInColumn.filter((task) => task.card_id !== id);
-    updatedTasks[columnIdx].cards = otherTasks;
-    setTasks(updatedTasks);
+    dispatch({
+      type: ActionType.DELETE_CARD,
+      payload: { cardToDelete: id, column: columnIdx },
+    });
   };
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setNewTaskName(e.target.value);
+    setNewCardName(e.target.value);
   };
 
   const onSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -101,7 +99,7 @@ export default function Task({ taskName, setTasks, id, tasks, columnIdx }: TaskP
     <Card className="min-h-16 p-3 my-0.5 w-full bg-primary-foreground/30">
       {isEditing ? (
         <form onSubmit={onSubmit}>
-          <Input autoFocus value={newTaskName} onChange={handleOnChange} onBlur={onBlur} />
+          <Input autoFocus value={newCardName} onChange={handleOnChange} onBlur={onBlur} />
         </form>
       ) : (
         <CardTitle className="flex justify-between items-center text-md">
