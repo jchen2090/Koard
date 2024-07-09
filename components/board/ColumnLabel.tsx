@@ -5,10 +5,13 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { ColumnHeaderProps } from "./Column";
 import { columnLabelConfig } from "./ColumnConfig";
+import { useAppContext } from "../providers/contextProvider";
+import { ActionType } from "@/reducers/actions";
 
-export default function ColumnLabel({ tasks, setTasks, column, columnName }: ColumnHeaderProps) {
+export default function ColumnLabel({ column, columnName }: ColumnHeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [newColumnName, setNewColumnName] = useState(columnName);
+  const { state, dispatch } = useAppContext();
 
   const editColumnName = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -17,11 +20,11 @@ export default function ColumnLabel({ tasks, setTasks, column, columnName }: Col
       setIsOpen(false);
       return;
     }
-    // Need to make a deep copy in order for react to rerender
-    const updatedData = JSON.parse(JSON.stringify(tasks));
-    updatedData[column].columnName = newColumnName;
 
-    setTasks(updatedData);
+    dispatch({
+      type: ActionType.EDIT_COLUMN_NAME,
+      payload: { newName: newColumnName, column: column },
+    });
     setIsOpen(false);
   };
 
@@ -32,7 +35,9 @@ export default function ColumnLabel({ tasks, setTasks, column, columnName }: Col
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button className={`text-sm h-6 px-4 ${columnLabelConfig[tasks[column].color]} text-black dark:text-white`}>
+        <Button
+          className={`text-sm h-6 px-4 ${columnLabelConfig[state.data[column].color]} text-black dark:text-white`}
+        >
           {columnName}
         </Button>
       </PopoverTrigger>
