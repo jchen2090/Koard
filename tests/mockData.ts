@@ -22,6 +22,7 @@ export default function getMockData(): DataSchema[] {
         },
       ],
       color: "Red",
+      column_id: "1",
     },
     {
       column_name: "Sample Data 2",
@@ -38,6 +39,7 @@ export default function getMockData(): DataSchema[] {
         },
       ],
       color: "Gray",
+      column_id: "2",
     },
     {
       column_name: "Sample Data 3",
@@ -49,6 +51,7 @@ export default function getMockData(): DataSchema[] {
         },
       ],
       color: "Blue",
+      column_id: "3",
     },
   ];
 }

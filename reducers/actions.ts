@@ -1,4 +1,5 @@
 import { CardSchema, DataSchema } from "@/app/project/page";
+import { DraggableLocation } from "@hello-pangea/dnd";
 
 export enum ActionType {
   SET_DATA,
@@ -9,11 +10,28 @@ export enum ActionType {
   EDIT_COLUMN_NAME,
   DELETE_COLUMN,
   UPDATE_COLUMN_COLOR,
+  CHANGE_CARD_ORDER,
+  CHANGE_COLUMN,
+  FLUSH_CHANGES,
 }
 
 type removeCardAction = {
   type: ActionType.DELETE_CARD;
   payload: { cardToDelete: string; column: number };
+};
+
+type changeCardOrderAction = {
+  type: ActionType.CHANGE_CARD_ORDER;
+  payload: { source: DraggableLocation; destination: DraggableLocation };
+};
+
+type changeColumnAction = {
+  type: ActionType.CHANGE_COLUMN;
+  payload: { source: DraggableLocation; destination: DraggableLocation };
+};
+
+type flushChangesAction = {
+  type: ActionType.FLUSH_CHANGES;
 };
 
 type addCardAction = {
@@ -59,4 +77,7 @@ export type actionTypes =
   | changeCardNameAction
   | editColumnNameAction
   | deleteColumnAction
-  | updateColumnColorAction;
+  | updateColumnColorAction
+  | changeCardOrderAction
+  | changeColumnAction
+  | flushChangesAction;

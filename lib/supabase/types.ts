@@ -5,24 +5,34 @@ export type Database = {
     Tables: {
       cards: {
         Row: {
+          card_desc: string | null;
+          card_id: string;
+          card_name: string | null;
           column_id: string;
-          task_desc: string | null;
-          task_id: string;
-          task_name: string | null;
+          user_id: string | null;
         };
         Insert: {
+          card_desc?: string | null;
+          card_id?: string;
+          card_name?: string | null;
           column_id: string;
-          task_desc?: string | null;
-          task_id?: string;
-          task_name?: string | null;
+          user_id?: string | null;
         };
         Update: {
+          card_desc?: string | null;
+          card_id?: string;
+          card_name?: string | null;
           column_id?: string;
-          task_desc?: string | null;
-          task_id?: string;
-          task_name?: string | null;
+          user_id?: string | null;
         };
         Relationships: [
+          {
+            foreignKeyName: "cards_user_id_fkey";
+            columns: ["user_id"];
+            isOneToOne: false;
+            referencedRelation: "users";
+            referencedColumns: ["user_id"];
+          },
           {
             foreignKeyName: "Tasks_column_id_fkey";
             columns: ["column_id"];
