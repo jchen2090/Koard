@@ -1,18 +1,13 @@
 "use client";
 
 import { Dispatch, ReactNode, createContext, useContext, useMemo, useReducer } from "react";
-import { DataSchema } from "@/app/project/page";
 import { appReducer } from "../../reducers/appReducer";
 import { actionTypes } from "../../reducers/actions";
-
-export interface initialStateType {
-  data: DataSchema[];
-  changes: any[];
-}
+import { initialStateType } from "./types";
 
 const initialState: initialStateType = {
   data: [],
-  changes: [],
+  changes: { added: [], deleted: [], updated: [] },
 };
 
 interface contextType {

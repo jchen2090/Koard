@@ -31,6 +31,7 @@ export default function NewColumnButton() {
       column_name: columnName,
       cards: [],
       color: "Gray",
+      column_id: self.crypto.randomUUID(),
     };
     dispatch({ type: ActionType.ADD_COLUMN, payload: newColumn });
     setIsOpen(false);

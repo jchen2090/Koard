@@ -10,6 +10,7 @@ export interface CardSchema {
 
 export interface DataSchema {
   column_name: string;
+  column_id: string;
   cards: CardSchema[];
   color: string;
 }
