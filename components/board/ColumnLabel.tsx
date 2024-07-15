@@ -35,10 +35,8 @@ export default function ColumnLabel({ column, columnName }: ColumnHeaderProps) {
   return (
     <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
-        <Button
-          className={`text-sm h-6 px-4 ${columnLabelConfig[state.data[column].color]} text-black dark:text-white`}
-        >
-          {columnName}
+        <Button className={`text-sm h-6 p-0 ${columnLabelConfig[state.data[column].color]} text-black dark:text-white`}>
+          <span className="mx-4 max-w-32 truncate">{columnName}</span>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-80">

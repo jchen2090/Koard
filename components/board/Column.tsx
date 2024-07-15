@@ -19,7 +19,7 @@ export default function Column({ columnIdx }: ColumnProps) {
   const { cards: cardData, column_name } = state.data[columnIdx];
 
   return (
-    <div className="p-2 min-w-72">
+    <div className="p-2 min-w-72 max-w-72">
       <span className="flex justify-between items-center group mb-2">
         <ColumnLabel column={columnIdx} columnName={column_name} />
         <EditColumnDropDown column={columnIdx} columnName={column_name} />

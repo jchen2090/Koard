@@ -60,7 +60,7 @@ export default function Board({ data }: BoardProps) {
   };
 
   return (
-    <div className="flex flex-row gap-4 w-auto">
+    <div className="flex flex-row gap-4 w-auto overflow-x-auto">
       <DragDropContext onDragEnd={onDragEnd}>
         {tasks.map((_, idx) => (
           <Column columnIdx={idx} key={idx} />

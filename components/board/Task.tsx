@@ -102,9 +102,9 @@ export default function Task({ taskName, id, columnIdx }: TaskProps) {
           <Input autoFocus value={newCardName} onChange={handleOnChange} onBlur={onBlur} />
         </form>
       ) : (
-        <CardTitle className="flex justify-between items-center text-md">
-          {taskName !== "" ? taskName : "Untitled"}
-          <div className="flex gap-1">
+        <CardTitle className="flex justify-between items-center text-md ">
+          <span className="text-ellipsis overflow-hidden">{taskName !== "" ? taskName : "Untitled"}</span>
+          <div className="flex gap-1 ml-2">
             <DesctructiveModal />
             <Button size="icon" variant="outline" className="bg-inherit" onClick={editTaskName}>
               <RxPencil2 className="h-4 w-4 dark:text-white text-black" />
