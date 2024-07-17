@@ -23,7 +23,12 @@ export async function getData() {
 }
 
 export async function syncData(changes: ChangeType) {
+  if (process.env.NODE_ENV === "development") {
+    console.log(JSON.stringify(changes));
+    return;
+  }
+
   changes.added.forEach((change) => handleAddedChanges(change));
-  changes.deleted.forEach((change) => handleDeletedChanges(change));
   changes.updated.forEach((change) => handleUpdatedChanges(change));
+  changes.deleted.forEach((change) => handleDeletedChanges(change));
 }

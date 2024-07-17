@@ -19,6 +19,25 @@ export function appReducer(state: initialStateType, action: actionTypes): initia
         data: updatedCards,
         changes: {
           ...state.changes,
+
+          added: [
+            ...state.changes.added.filter((addition) => {
+              if (addition.type === ChangeTypesEnum.CARD) {
+                return addition.payload.cardData.card_id !== cardToDelete;
+              }
+              return true;
+            }),
+          ],
+
+          updated: [
+            ...state.changes.updated.filter((update) => {
+              if (update.type === ChangeTypesEnum.COLUMN || update.type === ChangeTypesEnum.CARD_NAME) {
+                return update.payload.cardId !== cardToDelete;
+              }
+              return true;
+            }),
+          ],
+
           deleted: [...state.changes.deleted, { type: ChangeTypesEnum.CARD, payload: { cardId: cardToDelete } }],
         },
       };
@@ -67,7 +86,12 @@ export function appReducer(state: initialStateType, action: actionTypes): initia
         changes: {
           ...state.changes,
           updated: [
-            ...state.changes.updated,
+            ...state.changes.updated.filter((update) => {
+              if (update.type === ChangeTypesEnum.CARD_NAME) {
+                return update.payload.cardId !== cardId;
+              }
+              return true;
+            }),
             { type: ChangeTypesEnum.CARD_NAME, payload: { cardId: cardId, newName: newName } },
           ],
         },
@@ -86,7 +110,12 @@ export function appReducer(state: initialStateType, action: actionTypes): initia
         changes: {
           ...state.changes,
           updated: [
-            ...state.changes.updated,
+            ...state.changes.updated.filter((update) => {
+              if (update.type === ChangeTypesEnum.COLUMN_NAME) {
+                return update.payload.columnId !== columnId;
+              }
+              return true;
+            }),
             { type: ChangeTypesEnum.COLUMN_NAME, payload: { columnId: columnId, newName: newName } },
           ],
         },
@@ -101,6 +130,27 @@ export function appReducer(state: initialStateType, action: actionTypes): initia
         data: [...state.data.slice(0, column), ...state.data.slice(column + 1)],
         changes: {
           ...state.changes,
+
+          added: [
+            ...state.changes.added.filter((addition) => {
+              if (addition.type === ChangeTypesEnum.COLUMN) {
+                return addition.payload.columnData.column_id !== columnId;
+              }
+              return true;
+            }),
+          ],
+
+          updated: [
+            ...state.changes.updated.filter((update) => {
+              if (update.type === ChangeTypesEnum.COLUMN_NAME || update.type === ChangeTypesEnum.COLOR) {
+                return update.payload.columnId !== columnId;
+              } else if (update.type === ChangeTypesEnum.COLUMN) {
+                return update.payload.newColumnId !== columnId;
+              }
+              return true;
+            }),
+          ],
+
           deleted: [
             ...state.changes.deleted,
             {
@@ -124,7 +174,12 @@ export function appReducer(state: initialStateType, action: actionTypes): initia
         changes: {
           ...state.changes,
           updated: [
-            ...state.changes.updated,
+            ...state.changes.updated.filter((update) => {
+              if (update.type === ChangeTypesEnum.COLOR) {
+                return update.payload.columnId !== columnId;
+              }
+              return true;
+            }),
             { type: ChangeTypesEnum.COLOR, payload: { columnId: columnId, newColor: newColor } },
           ],
         },
@@ -158,7 +213,12 @@ export function appReducer(state: initialStateType, action: actionTypes): initia
         changes: {
           ...state.changes,
           updated: [
-            ...state.changes.updated,
+            ...state.changes.updated.filter((update) => {
+              if (update.type === ChangeTypesEnum.COLUMN) {
+                return update.payload.cardId !== cardToMove.card_id;
+              }
+              return true;
+            }),
             {
               type: ChangeTypesEnum.COLUMN,
               payload: { cardId: cardToMove.card_id, newColumnId: newState[newColumn].column_id },
