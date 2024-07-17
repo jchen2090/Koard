@@ -5,16 +5,14 @@ export async function middleware(request: NextRequest) {
   const { supabase, response } = createClient(request);
   let authenticated: boolean;
 
-  if (process.env.APP_ENV === "dev") {
-    authenticated = true;
-  } else if (process.env.APP_ENV === "prod") {
+  if (process.env.NODE_ENV === "production") {
     const {
       data: { user },
     } = await supabase.auth.getUser();
 
     authenticated = !!user;
   } else {
-    throw new Error("APP_ENV Not specified in .env");
+    authenticated = true;
   }
 
   // Public Pages
