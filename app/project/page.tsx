@@ -18,12 +18,10 @@ export interface DataSchema {
 export default async function Project() {
   let data: DataSchema[];
 
-  if (process.env.APP_ENV === "dev") {
-    data = getMockData();
-  } else if (process.env.APP_ENV === "prod") {
+  if (process.env.NODE_ENV === "production") {
     data = await getData();
   } else {
-    data = [];
+    data = getMockData();
   }
 
   return <Board data={data} />;
