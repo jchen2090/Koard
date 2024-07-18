@@ -259,6 +259,13 @@ export function appReducer(state: initialStateType, action: actionTypes): initia
         },
       };
     }
+    case ActionType.UPDATE_SYNC_STATUS: {
+      const { status } = action.payload;
+      return {
+        ...state,
+        isSynced: status,
+      };
+    }
     default:
       throw new Error("Reducer action does not exist");
   }

@@ -8,6 +8,7 @@ import { initialStateType } from "./types";
 const initialState: initialStateType = {
   data: [],
   changes: { added: [], deleted: [], updated: [] },
+  isSynced: true,
 };
 
 interface contextType {
