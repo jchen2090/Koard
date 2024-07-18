@@ -1,6 +1,7 @@
 import Link from "next/link";
 import ThemeToggler from "./ThemeToggler";
 import { getUserSession } from "@/lib/supabase/actions";
+import SyncStatus from "./SyncStatus";
 
 export default async function Navbar() {
   const data = await getUserSession();
@@ -12,7 +13,10 @@ export default async function Navbar() {
           Koard
         </Link>
       </nav>
-      <ThemeToggler user={data.user} />
+      <div className="flex flex-row items-center gap-2">
+        <SyncStatus />
+        <ThemeToggler user={data.user} />
+      </div>
     </div>
   );
 }

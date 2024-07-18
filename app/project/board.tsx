@@ -20,20 +20,22 @@ function hasChanges(changes: ChangeType) {
 
 export default function Board({ data }: BoardProps) {
   const { state, dispatch } = useAppContext();
-  const { data: tasks } = state;
 
   useEffect(() => {
     dispatch({ type: ActionType.SET_DATA, payload: data });
   }, [data, dispatch]);
 
   useEffect(() => {
-    const timeoutId = setTimeout(() => {
-      if (!hasChanges(state.changes)) {
-        return;
-      }
+    if (!hasChanges(state.changes)) {
+      return;
+    }
 
-      syncData(state.changes);
-      dispatch({ type: ActionType.FLUSH_CHANGES });
+    dispatch({ type: ActionType.UPDATE_SYNC_STATUS, payload: { status: false } });
+    const timeoutId = setTimeout(() => {
+      syncData(state.changes).then(() => {
+        dispatch({ type: ActionType.FLUSH_CHANGES });
+        dispatch({ type: ActionType.UPDATE_SYNC_STATUS, payload: { status: true } });
+      });
     }, 2000);
 
     return () => clearTimeout(timeoutId);
@@ -62,7 +64,7 @@ export default function Board({ data }: BoardProps) {
   return (
     <div className="flex flex-row gap-4 w-auto overflow-x-auto">
       <DragDropContext onDragEnd={onDragEnd}>
-        {tasks.map((_, idx) => (
+        {state.data.map((_, idx) => (
           <Column columnIdx={idx} key={idx} />
         ))}
       </DragDropContext>

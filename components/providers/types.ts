@@ -31,4 +31,5 @@ export type ChangeType = {
 export type initialStateType = {
   data: DataSchema[];
   changes: ChangeType;
+  isSynced: boolean;
 };
