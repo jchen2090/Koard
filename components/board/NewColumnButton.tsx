@@ -8,8 +8,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Form, FormField, FormItem, FormControl } from "../ui/form";
 import { Input } from "../ui/input";
-import { useAppContext } from "../providers/contextProvider";
-import { ActionType } from "@/reducers/actions";
+import { useBoardContext } from "../providers/boardStateProvider";
+import { ActionType } from "@/reducers/board/actions";
 
 const formSchema = z.object({
   columnName: z.string(),
@@ -17,7 +17,7 @@ const formSchema = z.object({
 
 export default function NewColumnButton() {
   const [isOpen, setIsOpen] = useState(false);
-  const { dispatch } = useAppContext();
+  const { dispatch } = useBoardContext();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {

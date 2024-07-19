@@ -16,11 +16,11 @@ import { ColumnHeaderProps } from "./Column";
 import { DialogHeader, DialogFooter } from "../ui/dialog";
 import { useState } from "react";
 import { columnDropdownConfig } from "./ColumnConfig";
-import { useAppContext } from "../providers/contextProvider";
-import { ActionType } from "@/reducers/actions";
+import { useBoardContext } from "../providers/boardStateProvider";
+import { ActionType } from "@/reducers/board/actions";
 
 export default function EditColumnDropDowCn({ column }: ColumnHeaderProps) {
-  const { state, dispatch } = useAppContext();
+  const { state, dispatch } = useBoardContext();
   const [isOpen, setIsOpen] = useState(false);
   const [color, setColor] = useState(state.data[column].color);
 

@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useAppContext } from "./providers/contextProvider";
 import { RxCheck, RxReload } from "react-icons/rx";
+import { useGlobalContext } from "./providers/globalStateProvider";
 
 function updateStatusMessage(message: string) {
   const pattern = /\./g;
@@ -20,7 +20,7 @@ function updateStatusMessage(message: string) {
 }
 
 export default function SyncStatus() {
-  const { state } = useAppContext();
+  const { state } = useGlobalContext();
   const [statusMessage, setStatusMessage] = useState("Saving");
   const syncedMessage = useRef("");
 

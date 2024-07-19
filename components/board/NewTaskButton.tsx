@@ -8,8 +8,8 @@ import { Form, FormControl, FormField, FormItem } from "../ui/form";
 import { CardSchema } from "@/app/project/page";
 import { useState } from "react";
 import { Input } from "../ui/input";
-import { useAppContext } from "../providers/contextProvider";
-import { ActionType } from "@/reducers/actions";
+import { useBoardContext } from "../providers/boardStateProvider";
+import { ActionType } from "@/reducers/board/actions";
 
 const formSchema = z.object({
   taskName: z.string(),
@@ -27,7 +27,7 @@ export default function NewTaskButton({ columnIdx }: NewTaskButtonProps) {
     },
   });
   const [isOpen, setIsOpen] = useState(false);
-  const { dispatch } = useAppContext();
+  const { dispatch } = useBoardContext();
 
   const createNewCard = (values: z.infer<typeof formSchema>) => {
     const { taskName } = values;

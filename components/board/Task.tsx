@@ -14,8 +14,8 @@ import {
   DialogFooter,
 } from "../ui/dialog";
 import { DialogClose } from "@radix-ui/react-dialog";
-import { useAppContext } from "../providers/contextProvider";
-import { ActionType } from "@/reducers/actions";
+import { useBoardContext } from "../providers/boardStateProvider";
+import { ActionType } from "@/reducers/board/actions";
 
 interface TaskProps {
   taskName: string;
@@ -27,7 +27,7 @@ interface TaskProps {
 export default function Task({ taskName, id, columnIdx }: TaskProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [newCardName, setNewCardName] = useState(taskName);
-  const { state, dispatch } = useAppContext();
+  const { state, dispatch } = useBoardContext();
   const { cards: cardsInColumn } = state.data[columnIdx];
 
   const editTaskName = () => {

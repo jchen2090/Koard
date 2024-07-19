@@ -13,7 +13,6 @@ export enum ActionType {
   CHANGE_CARD_ORDER,
   CHANGE_COLUMN,
   FLUSH_CHANGES,
-  UPDATE_SYNC_STATUS,
 }
 
 type removeCardAction = {
@@ -70,11 +69,6 @@ type updateColumnColorAction = {
   payload: { newColor: string; column: number };
 };
 
-type updateSyncStatusAction = {
-  type: ActionType.UPDATE_SYNC_STATUS;
-  payload: { status: boolean };
-};
-
 export type actionTypes =
   | removeCardAction
   | addCardAction
@@ -86,5 +80,4 @@ export type actionTypes =
   | updateColumnColorAction
   | changeCardOrderAction
   | changeColumnAction
-  | flushChangesAction
-  | updateSyncStatusAction;
+  | flushChangesAction;
