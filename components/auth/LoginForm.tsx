@@ -27,13 +27,12 @@ export default function LoginForm() {
     },
   });
 
-  //TODO: Should route to home page post login
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     const { authenticated } = await signInWithEmailAndPassword(values);
 
     if (authenticated) {
-      router.push("/");
+      router.push("/project");
     } else {
       form.setError("root", { type: "server", message: "Email or password is incorrect" });
       setIsLoading(false);
