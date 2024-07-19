@@ -13,10 +13,11 @@ export async function getData() {
   const { data, error } = await supabase
     .from("columns")
     .select(`column_name, column_id, color, cards (card_name, card_id)`)
+    .order("index", { referencedTable: "cards", ascending: true })
     .returns<DataSchema[]>();
 
   if (error) {
-    console.error(`Error when getting data ${error}`);
+    console.error(`Error when getting data ${JSON.stringify(error, null, 2)}`);
     return [];
   }
   return data;
@@ -24,7 +25,7 @@ export async function getData() {
 
 export async function syncData(changes: ChangeType) {
   if (process.env.NODE_ENV === "development") {
-    console.log(JSON.stringify(changes));
+    console.log(JSON.stringify(changes, null, 2));
     return;
   }
 

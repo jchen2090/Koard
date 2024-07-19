@@ -9,6 +9,7 @@ export type Database = {
           card_id: string;
           card_name: string | null;
           column_id: string;
+          index: number;
           user_id: string | null;
         };
         Insert: {
@@ -16,6 +17,7 @@ export type Database = {
           card_id?: string;
           card_name?: string | null;
           column_id: string;
+          index: number;
           user_id?: string | null;
         };
         Update: {
@@ -23,6 +25,7 @@ export type Database = {
           card_id?: string;
           card_name?: string | null;
           column_id?: string;
+          index?: number;
           user_id?: string | null;
         };
         Relationships: [

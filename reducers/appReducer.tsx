@@ -1,9 +1,6 @@
 import { ChangeTypesEnum, initialStateType } from "@/components/providers/types";
 import { ActionType, actionTypes } from "./actions";
 
-//TODO: Data should be sanitized before added to changes,
-// i,e if we change the name of a card multiple times we should only save the most recent
-// change
 export function appReducer(state: initialStateType, action: actionTypes): initialStateType {
   switch (action.type) {
     case ActionType.SET_DATA:
@@ -54,6 +51,7 @@ export function appReducer(state: initialStateType, action: actionTypes): initia
     case ActionType.ADD_CARD: {
       const { cardData, column } = action.payload;
       const columnUid = state.data[column].column_id;
+      const index = state.data[column].cards.length;
       const updatedState = [...state.data];
 
       const updatedColumn = {
@@ -69,7 +67,7 @@ export function appReducer(state: initialStateType, action: actionTypes): initia
           ...state.changes,
           added: [
             ...state.changes.added,
-            { type: ChangeTypesEnum.CARD, payload: { cardData: cardData, columnId: columnUid } },
+            { type: ChangeTypesEnum.CARD, payload: { cardData: cardData, columnId: columnUid, index: index } },
           ],
         },
       };
@@ -145,7 +143,7 @@ export function appReducer(state: initialStateType, action: actionTypes): initia
               if (update.type === ChangeTypesEnum.COLUMN_NAME || update.type === ChangeTypesEnum.COLOR) {
                 return update.payload.columnId !== columnId;
               } else if (update.type === ChangeTypesEnum.COLUMN) {
-                return update.payload.newColumnId !== columnId;
+                return update.payload.newColumn.column_id !== columnId;
               }
               return true;
             }),
@@ -215,19 +213,18 @@ export function appReducer(state: initialStateType, action: actionTypes): initia
           updated: [
             ...state.changes.updated.filter((update) => {
               if (update.type === ChangeTypesEnum.COLUMN) {
-                return update.payload.cardId !== cardToMove.card_id;
+                return update.payload.newColumn.column_id !== state.data[newColumn].column_id;
               }
               return true;
             }),
             {
               type: ChangeTypesEnum.COLUMN,
-              payload: { cardId: cardToMove.card_id, newColumnId: newState[newColumn].column_id },
+              payload: { cardId: cardToMove.card_id, oldColumn: newState[oldColumn], newColumn: newState[newColumn] },
             },
           ],
         },
       };
     }
-    //TODO: Figure out how to change order on supabase
     case ActionType.CHANGE_CARD_ORDER: {
       const { source, destination } = action.payload;
       const { index: oldCardIdx } = source;
@@ -236,6 +233,7 @@ export function appReducer(state: initialStateType, action: actionTypes): initia
 
       const columnIdx = state.data.findIndex((column) => column.column_name === source.droppableId);
       const cardToMove = state.data[columnIdx].cards[oldCardIdx];
+      const columnId = state.data[columnIdx].column_id;
 
       const cardsInColumn = [
         ...newState[columnIdx].cards.slice(0, oldCardIdx),
@@ -246,8 +244,27 @@ export function appReducer(state: initialStateType, action: actionTypes): initia
         ...newState[columnIdx],
         cards: [...cardsInColumn.slice(0, newCardIdx), cardToMove, ...cardsInColumn.slice(newCardIdx)],
       };
+      const newCardOrder = newState[columnIdx].cards;
 
-      return { ...state, data: newState };
+      return {
+        ...state,
+        data: newState,
+        changes: {
+          ...state.changes,
+          updated: [
+            ...state.changes.updated.filter((update) => {
+              if (update.type === ChangeTypesEnum.CARD_ORDER) {
+                return update.payload.columnId !== columnId;
+              }
+              return true;
+            }),
+            {
+              type: ChangeTypesEnum.CARD_ORDER,
+              payload: { columnId, newCardOrder },
+            },
+          ],
+        },
+      };
     }
     case ActionType.FLUSH_CHANGES: {
       return {

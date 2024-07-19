@@ -7,8 +7,8 @@ export function handleAddedChanges(change: AddedChanges) {
     const { columnData } = change.payload;
     insertNewColumns(columnData);
   } else if (change.type === ChangeTypesEnum.CARD) {
-    const { cardData, columnId } = change.payload;
-    insertNewCard(cardData, columnId);
+    const { cardData, columnId, index } = change.payload;
+    insertNewCard(cardData, columnId, index);
   }
 }
 
@@ -23,11 +23,11 @@ export async function insertNewColumns(column: DataSchema) {
   }
 }
 
-export async function insertNewCard(card: CardSchema, column_id: string) {
+export async function insertNewCard(card: CardSchema, column_id: string, index: number) {
   const supabase = await createSupabaseServerClient();
   const { card_id, card_desc, card_name } = card;
 
-  const { error } = await supabase.from("cards").insert({ card_id, card_desc, card_name, column_id });
+  const { error } = await supabase.from("cards").insert({ card_id, card_desc, card_name, column_id, index });
 
   if (error) {
     throw new Error(`Error while creating new cards" ${JSON.stringify(error)}`);

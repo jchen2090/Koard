@@ -6,10 +6,11 @@ export enum ChangeTypesEnum {
   CARD_NAME,
   COLUMN_NAME,
   COLOR,
+  CARD_ORDER,
 }
 
 export type AddedChanges =
-  | { type: ChangeTypesEnum.CARD; payload: { cardData: CardSchema; columnId: string } }
+  | { type: ChangeTypesEnum.CARD; payload: { cardData: CardSchema; columnId: string; index: number } }
   | { type: ChangeTypesEnum.COLUMN; payload: { columnData: DataSchema } };
 
 export type DeletedChanges =
@@ -20,8 +21,8 @@ export type UpdatedChanges =
   | { type: ChangeTypesEnum.CARD_NAME; payload: { cardId: string; newName: string } }
   | { type: ChangeTypesEnum.COLUMN_NAME; payload: { columnId: string; newName: string } }
   | { type: ChangeTypesEnum.COLOR; payload: { columnId: string; newColor: string } }
-  | { type: ChangeTypesEnum.COLUMN; payload: { cardId: string; newColumnId: string } };
-
+  | { type: ChangeTypesEnum.COLUMN; payload: { cardId: string; oldColumn: DataSchema; newColumn: DataSchema } }
+  | { type: ChangeTypesEnum.CARD_ORDER; payload: { columnId: string; newCardOrder: CardSchema[] } };
 export type ChangeType = {
   added: AddedChanges[];
   deleted: DeletedChanges[];
