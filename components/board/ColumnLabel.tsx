@@ -5,13 +5,13 @@ import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { ColumnHeaderProps } from "./Column";
 import { columnLabelConfig } from "./ColumnConfig";
-import { useAppContext } from "../providers/contextProvider";
-import { ActionType } from "@/reducers/actions";
+import { useBoardContext } from "../providers/boardStateProvider";
+import { ActionType } from "@/reducers/board/actions";
 
 export default function ColumnLabel({ column, columnName }: ColumnHeaderProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [newColumnName, setNewColumnName] = useState(columnName);
-  const { state, dispatch } = useAppContext();
+  const { state, dispatch } = useBoardContext();
 
   const editColumnName = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();

@@ -1,7 +1,7 @@
 import { ChangeTypesEnum, initialStateType } from "@/components/providers/types";
 import { ActionType, actionTypes } from "./actions";
 
-export function appReducer(state: initialStateType, action: actionTypes): initialStateType {
+export function boardReducer(state: initialStateType, action: actionTypes): initialStateType {
   switch (action.type) {
     case ActionType.SET_DATA:
       return { ...state, data: action.payload };
@@ -274,13 +274,6 @@ export function appReducer(state: initialStateType, action: actionTypes): initia
           deleted: [],
           updated: [],
         },
-      };
-    }
-    case ActionType.UPDATE_SYNC_STATUS: {
-      const { status } = action.payload;
-      return {
-        ...state,
-        isSynced: status,
       };
     }
     default:

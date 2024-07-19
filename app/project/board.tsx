@@ -5,10 +5,12 @@ import NewColumnButton from "@/components/board/NewColumnButton";
 import { DropResult, DragDropContext } from "@hello-pangea/dnd";
 import { useEffect } from "react";
 import { DataSchema } from "./page";
-import { useAppContext } from "@/components/providers/contextProvider";
-import { ActionType } from "@/reducers/actions";
 import { syncData } from "@/lib/supabase/queries";
 import { ChangeType } from "@/components/providers/types";
+import { useBoardContext } from "@/components/providers/boardStateProvider";
+import { ActionType } from "@/reducers/board/actions";
+import { useGlobalContext } from "@/components/providers/globalStateProvider";
+import { GlobalActionType } from "@/reducers/global/actions";
 
 interface BoardProps {
   data: DataSchema[];
@@ -19,27 +21,24 @@ function hasChanges(changes: ChangeType) {
 }
 
 export default function Board({ data }: BoardProps) {
-  const { state, dispatch } = useAppContext();
-
-  useEffect(() => {
-    dispatch({ type: ActionType.SET_DATA, payload: data });
-  }, [data, dispatch]);
+  const { state, dispatch } = useBoardContext();
+  const { dispatch: globalStateDispatch } = useGlobalContext();
 
   useEffect(() => {
     if (!hasChanges(state.changes)) {
       return;
     }
 
-    dispatch({ type: ActionType.UPDATE_SYNC_STATUS, payload: { status: false } });
+    globalStateDispatch({ type: GlobalActionType.UPDATE_SYNC_STATUS, payload: { status: false } });
     const timeoutId = setTimeout(() => {
       syncData(state.changes).then(() => {
         dispatch({ type: ActionType.FLUSH_CHANGES });
-        dispatch({ type: ActionType.UPDATE_SYNC_STATUS, payload: { status: true } });
+        globalStateDispatch({ type: GlobalActionType.UPDATE_SYNC_STATUS, payload: { status: true } });
       });
     }, 2000);
 
     return () => clearTimeout(timeoutId);
-  }, [state.changes, dispatch]);
+  }, [state.changes, dispatch, globalStateDispatch]);
 
   //TODO: Minor optimizations potentially needed here
   const onDragEnd = (result: DropResult) => {

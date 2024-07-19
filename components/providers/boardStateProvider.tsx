@@ -1,15 +1,10 @@
 "use client";
 
 import { Dispatch, ReactNode, createContext, useContext, useMemo, useReducer } from "react";
-import { appReducer } from "../../reducers/appReducer";
-import { actionTypes } from "../../reducers/actions";
+import { boardReducer } from "../../reducers/board/boardReducer";
+import { actionTypes } from "../../reducers/board/actions";
 import { initialStateType } from "./types";
-
-const initialState: initialStateType = {
-  data: [],
-  changes: { added: [], deleted: [], updated: [] },
-  isSynced: true,
-};
+import { DataSchema } from "@/app/project/page";
 
 interface contextType {
   state: initialStateType;
@@ -18,8 +13,15 @@ interface contextType {
 
 const AppContext = createContext<contextType | null>(null);
 
-export function ContextProvider({ children }: Readonly<{ children: ReactNode }>) {
-  const [state, dispatch] = useReducer(appReducer, initialState);
+export function BoardContextProvider({
+  children,
+  initialData,
+}: Readonly<{ children: ReactNode; initialData: DataSchema[] }>) {
+  const initialState: initialStateType = {
+    data: initialData,
+    changes: { added: [], deleted: [], updated: [] },
+  };
+  const [state, dispatch] = useReducer(boardReducer, initialState);
 
   const contextValues = useMemo(() => {
     return { state, dispatch };
@@ -28,7 +30,7 @@ export function ContextProvider({ children }: Readonly<{ children: ReactNode }>)
   return <AppContext.Provider value={contextValues}>{children}</AppContext.Provider>;
 }
 
-export function useAppContext() {
+export function useBoardContext() {
   const context = useContext(AppContext);
 
   if (!context) {

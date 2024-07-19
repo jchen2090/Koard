@@ -3,7 +3,7 @@ import Task from "./Task";
 import NewTaskButton from "./NewTaskButton";
 import ColumnLabel from "./ColumnLabel";
 import EditColumnDropDown from "./EditColumnDropDown";
-import { useAppContext } from "../providers/contextProvider";
+import { useBoardContext } from "../providers/boardStateProvider";
 
 interface ColumnProps {
   columnIdx: number;
@@ -15,7 +15,7 @@ export interface ColumnHeaderProps {
 }
 
 export default function Column({ columnIdx }: ColumnProps) {
-  const { state } = useAppContext();
+  const { state } = useBoardContext();
   const { cards: cardData, column_name } = state.data[columnIdx];
 
   return (
