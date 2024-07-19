@@ -27,6 +27,12 @@ export default function NewColumnButton() {
 
   const createNewColumn = (values: z.infer<typeof formSchema>) => {
     const { columnName } = values;
+
+    if (columnName === "") {
+      setIsOpen(false);
+      return;
+    }
+
     const newColumn: DataSchema = {
       column_name: columnName,
       cards: [],
