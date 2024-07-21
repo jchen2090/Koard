@@ -13,6 +13,7 @@ export enum ActionType {
   CHANGE_CARD_ORDER,
   CHANGE_COLUMN,
   FLUSH_CHANGES,
+  CHANGE_COLUMN_ORDER,
 }
 
 type removeCardAction = {
@@ -69,6 +70,11 @@ type updateColumnColorAction = {
   payload: { newColor: string; column: number };
 };
 
+type updateColumnOrderAction = {
+  type: ActionType.CHANGE_COLUMN_ORDER;
+  payload: { source: DraggableLocation; destination: DraggableLocation };
+};
+
 export type actionTypes =
   | removeCardAction
   | addCardAction
@@ -80,4 +86,5 @@ export type actionTypes =
   | updateColumnColorAction
   | changeCardOrderAction
   | changeColumnAction
-  | flushChangesAction;
+  | flushChangesAction
+  | updateColumnOrderAction;

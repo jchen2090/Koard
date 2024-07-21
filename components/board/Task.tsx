@@ -16,17 +16,19 @@ import {
 import { DialogClose } from "@radix-ui/react-dialog";
 import { useBoardContext } from "../providers/boardStateProvider";
 import { ActionType } from "@/reducers/board/actions";
+import { Draggable } from "@hello-pangea/dnd";
+import { CardSchema } from "@/app/project/page";
 
 interface TaskProps {
-  taskName: string;
-  taskDesc: string;
-  id: string;
+  card: CardSchema;
   columnIdx: number;
+  index: number;
 }
 
-export default function Task({ taskName, id, columnIdx }: TaskProps) {
+export default function Task({ card, columnIdx, index }: TaskProps) {
+  const { card_name: cardName, card_id: id } = card;
   const [isEditing, setIsEditing] = useState(false);
-  const [newCardName, setNewCardName] = useState(taskName);
+  const [newCardName, setNewCardName] = useState(cardName);
   const { state, dispatch } = useBoardContext();
   const { cards: cardsInColumn } = state.data[columnIdx];
 
@@ -96,22 +98,28 @@ export default function Task({ taskName, id, columnIdx }: TaskProps) {
   };
 
   return (
-    <Card className="min-h-16 p-3 my-0.5 w-full bg-primary-foreground/30">
-      {isEditing ? (
-        <form onSubmit={onSubmit}>
-          <Input autoFocus value={newCardName} onChange={handleOnChange} onBlur={onBlur} />
-        </form>
-      ) : (
-        <CardTitle className="flex justify-between items-center text-md ">
-          <span className="text-ellipsis overflow-hidden">{taskName !== "" ? taskName : "Untitled"}</span>
-          <div className="flex gap-1 ml-2">
-            <DesctructiveModal />
-            <Button size="icon" variant="outline" className="bg-inherit" onClick={editTaskName}>
-              <RxPencil2 className="h-4 w-4 dark:text-white text-black" />
-            </Button>
-          </div>
-        </CardTitle>
+    <Draggable draggableId={id} index={index}>
+      {(provided) => (
+        <div className="my-0.5" {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
+          <Card className="min-h-16 p-3 w-full bg-primary-foreground/30">
+            {isEditing ? (
+              <form onSubmit={onSubmit}>
+                <Input autoFocus value={newCardName} onChange={handleOnChange} onBlur={onBlur} />
+              </form>
+            ) : (
+              <CardTitle className="flex justify-between items-center text-md ">
+                <span className="text-ellipsis overflow-hidden">{cardName !== "" ? cardName : "Untitled"}</span>
+                <div className="flex gap-1 ml-2">
+                  <DesctructiveModal />
+                  <Button size="icon" variant="outline" className="bg-inherit" onClick={editTaskName}>
+                    <RxPencil2 className="h-4 w-4 dark:text-white text-black" />
+                  </Button>
+                </div>
+              </CardTitle>
+            )}
+          </Card>
+        </div>
       )}
-    </Card>
+    </Draggable>
   );
 }

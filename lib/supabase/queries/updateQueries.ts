@@ -18,6 +18,9 @@ export function handleUpdatedChanges(changes: UpdatedChanges) {
   } else if (changes.type === ChangeTypesEnum.CARD_ORDER) {
     const { columnId, newCardOrder } = changes.payload;
     updateCardOrder(columnId, newCardOrder);
+  } else if (changes.type === ChangeTypesEnum.COLUMN_ORDER) {
+    const { newColumnOrder } = changes.payload;
+    updateColumnOrder(newColumnOrder);
   }
 }
 
@@ -77,5 +80,18 @@ async function updateCardOrder(columnId: string, newCardOrder: CardSchema[]) {
 
   if (error) {
     throw new Error(`Error while updating card order: ${JSON.stringify(error, null, 2)}`);
+  }
+}
+
+async function updateColumnOrder(newColumnOrder: DataSchema[]) {
+  const supabase = await createSupabaseServerClient();
+
+  const upsertPayload = newColumnOrder.map((column, index) => {
+    return { column_id: column.column_id, index: index };
+  });
+  const { error } = await supabase.from("columns").upsert(upsertPayload);
+
+  if (error) {
+    throw new Error(`Error while updating column order: ${JSON.stringify(error, null, 2)}`);
   }
 }

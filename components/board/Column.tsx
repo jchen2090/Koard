@@ -16,31 +16,31 @@ export interface ColumnHeaderProps {
 
 export default function Column({ columnIdx }: ColumnProps) {
   const { state } = useBoardContext();
-  const { cards: cardData, column_name } = state.data[columnIdx];
+  const { cards: cardData, column_name, column_id } = state.data[columnIdx];
 
   return (
-    <div className="p-2 min-w-72 max-w-72">
-      <span className="flex justify-between items-center group mb-2">
-        <ColumnLabel column={columnIdx} columnName={column_name} />
-        <EditColumnDropDown column={columnIdx} columnName={column_name} />
-      </span>
-      <Droppable droppableId={column_name}>
-        {(provided) => (
-          <div ref={provided.innerRef} {...provided.droppableProps} className="flex flex-col">
-            {cardData.map((task, idx) => (
-              <Draggable key={task.card_id} draggableId={task.card_id.toString()} index={idx}>
-                {(provided) => (
-                  <div {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
-                    <Task taskName={task.card_name} taskDesc={task.card_desc} id={task.card_id} columnIdx={columnIdx} />
+    <Draggable draggableId={column_id} index={columnIdx}>
+      {(provided) => (
+        <div className="p-2 min-w-72 max-w-72 " {...provided.draggableProps} ref={provided.innerRef}>
+          <span {...provided.dragHandleProps} className="flex justify-between items-center group mb-2">
+            <ColumnLabel column={columnIdx} columnName={column_name} />
+            <EditColumnDropDown column={columnIdx} columnName={column_name} />
+          </span>
+          <Droppable droppableId={column_name} type="card" direction="vertical">
+            {(provided) => (
+              <div ref={provided.innerRef} {...provided.droppableProps} className="flex flex-col">
+                {cardData.map((card, idx) => (
+                  <div key={card.card_id}>
+                    <Task card={card} columnIdx={columnIdx} index={idx} />
                   </div>
-                )}
-              </Draggable>
-            ))}
-            {provided.placeholder}
-            <NewTaskButton columnIdx={columnIdx} />
-          </div>
-        )}
-      </Droppable>
-    </div>
+                ))}
+                {provided.placeholder}
+                <NewTaskButton columnIdx={columnIdx} />
+              </div>
+            )}
+          </Droppable>
+        </div>
+      )}
+    </Draggable>
   );
 }
