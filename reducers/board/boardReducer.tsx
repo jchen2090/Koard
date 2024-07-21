@@ -276,6 +276,28 @@ export function boardReducer(state: initialStateType, action: actionTypes): init
         },
       };
     }
+
+    case ActionType.CHANGE_COLUMN_ORDER: {
+      const { source, destination } = action.payload;
+      const { index: oldColumnIdx } = source;
+      const { index: newColumnIdx } = destination;
+      const columnToMove = state.data[oldColumnIdx];
+
+      const columns = [...state.data.slice(0, oldColumnIdx), ...state.data.slice(oldColumnIdx + 1)];
+      const newState = [...columns.slice(0, newColumnIdx), columnToMove, ...columns.slice(newColumnIdx)];
+
+      return {
+        ...state,
+        data: newState,
+        changes: {
+          ...state.changes,
+          updated: [
+            ...state.changes.updated.filter((update) => update.type !== ChangeTypesEnum.COLUMN_ORDER),
+            { type: ChangeTypesEnum.COLUMN_ORDER, payload: { newColumnOrder: newState } },
+          ],
+        },
+      };
+    }
     default:
       throw new Error("Reducer action does not exist");
   }

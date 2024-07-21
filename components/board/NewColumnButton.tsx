@@ -25,6 +25,7 @@ export default function NewColumnButton() {
     },
   });
 
+  //TODO: User should not be able to create duplicate columns
   const createNewColumn = (values: z.infer<typeof formSchema>) => {
     const { columnName } = values;
 

@@ -28,7 +28,7 @@ export default async function Project() {
 
   return (
     <BoardContextProvider initialData={data}>
-      <Board data={data} />
+      <Board />
     </BoardContextProvider>
   );
 }
