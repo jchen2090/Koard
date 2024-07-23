@@ -22,7 +22,7 @@ export default function ColumnLabel({ column, columnName }: ColumnHeaderProps) {
     }
 
     dispatch({
-      type: ActionType.EDIT_COLUMN_NAME,
+      type: ActionType.CHANGE_COLUMN_NAME,
       payload: { newName: newColumnName, column: column },
     });
     setIsOpen(false);

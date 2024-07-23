@@ -3,8 +3,6 @@ import { ActionType, actionTypes } from "./actions";
 
 export function boardReducer(state: initialStateType, action: actionTypes): initialStateType {
   switch (action.type) {
-    case ActionType.SET_DATA:
-      return { ...state, data: action.payload };
     case ActionType.DELETE_CARD: {
       const { cardToDelete, column } = action.payload;
       const updatedCards = [...state.data];
@@ -95,7 +93,7 @@ export function boardReducer(state: initialStateType, action: actionTypes): init
         },
       };
     }
-    case ActionType.EDIT_COLUMN_NAME: {
+    case ActionType.CHANGE_COLUMN_NAME: {
       const { newName, column } = action.payload;
       const columnId = state.data[column].column_id;
       const updatedColumns = [...state.data];
