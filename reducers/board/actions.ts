@@ -2,12 +2,11 @@ import { CardSchema, DataSchema } from "@/app/project/page";
 import { DraggableLocation } from "@hello-pangea/dnd";
 
 export enum ActionType {
-  SET_DATA,
   ADD_CARD,
   DELETE_CARD,
   ADD_COLUMN,
   CHANGE_CARD_NAME,
-  EDIT_COLUMN_NAME,
+  CHANGE_COLUMN_NAME,
   DELETE_COLUMN,
   UPDATE_COLUMN_COLOR,
   CHANGE_CARD_ORDER,
@@ -40,11 +39,6 @@ type addCardAction = {
   payload: { cardData: CardSchema; column: number };
 };
 
-type setDataAction = {
-  type: ActionType.SET_DATA;
-  payload: DataSchema[];
-};
-
 type addColumnAction = {
   type: ActionType.ADD_COLUMN;
   payload: DataSchema;
@@ -56,7 +50,7 @@ type changeCardNameAction = {
 };
 
 type editColumnNameAction = {
-  type: ActionType.EDIT_COLUMN_NAME;
+  type: ActionType.CHANGE_COLUMN_NAME;
   payload: { newName: string; column: number };
 };
 
@@ -78,7 +72,6 @@ type updateColumnOrderAction = {
 export type actionTypes =
   | removeCardAction
   | addCardAction
-  | setDataAction
   | addColumnAction
   | changeCardNameAction
   | editColumnNameAction

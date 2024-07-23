@@ -9,17 +9,12 @@ const config: Config = {
   coverageProvider: "v8",
   testEnvironment: "jsdom",
   collectCoverage: true,
-  collectCoverageFrom: ["app/**/*.{ts,tsx}", "!**/layout.tsx"],
+  collectCoverageFrom: ["reducers/**/*.{ts,tsx}"],
   coverageThreshold: {
     global: {
-      branches: 50,
-      functions: 50,
-      lines: 50,
-    },
-    "app/**/*.{ts,tsx}": {
-      branches: 50,
-      functions: 50,
-      lines: 50,
+      branches: 80,
+      functions: 80,
+      lines: 80,
     },
   },
 };
