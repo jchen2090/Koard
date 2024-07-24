@@ -13,6 +13,7 @@ export async function getData() {
   const { data, error } = await supabase
     .from("columns")
     .select(`column_name, column_id, color, cards (card_name, card_id)`)
+    .order("index", { ascending: true })
     .order("index", { referencedTable: "cards", ascending: true })
     .returns<DataSchema[]>();
 
@@ -21,6 +22,15 @@ export async function getData() {
     return [];
   }
   return data;
+}
+
+export async function createUserEntry() {
+  const supabase = await createSupabaseServerClient();
+  const { error } = await supabase.from("users").insert({});
+
+  if (error) {
+    console.log(`Error with creating new user: ${JSON.stringify(error, null, 2)}`);
+  }
 }
 
 export async function syncData(changes: ChangeType) {

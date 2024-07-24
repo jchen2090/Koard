@@ -12,7 +12,7 @@ export enum ChangeTypesEnum {
 
 export type AddedChanges =
   | { type: ChangeTypesEnum.CARD; payload: { cardData: CardSchema; columnId: string; index: number } }
-  | { type: ChangeTypesEnum.COLUMN; payload: { columnData: DataSchema } };
+  | { type: ChangeTypesEnum.COLUMN; payload: { columnData: DataSchema; index: number } };
 
 export type DeletedChanges =
   | { type: ChangeTypesEnum.CARD; payload: { cardId: string } }
