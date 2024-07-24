@@ -1,3 +1,4 @@
+import GuestSignInButton from "@/components/auth/GuestSignInButton";
 import LoginForm from "@/components/auth/LoginForm";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
@@ -9,10 +10,11 @@ export default function Login() {
       <CardContent>
         <LoginForm />
       </CardContent>
-      <CardFooter className="justify-center">
+      <CardFooter className="flex flex-col justify-center">
         <Link href="/signup" className="hover:underline italic text-sm">
           Don&apos;t have an account? Sign up
         </Link>
+        <GuestSignInButton />
       </CardFooter>
     </Card>
   );

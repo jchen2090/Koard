@@ -4,19 +4,19 @@ import { AddedChanges, ChangeTypesEnum } from "@/components/providers/types";
 
 export function handleAddedChanges(change: AddedChanges) {
   if (change.type === ChangeTypesEnum.COLUMN) {
-    const { columnData } = change.payload;
-    insertNewColumns(columnData);
+    const { columnData, index } = change.payload;
+    insertNewColumns(columnData, index);
   } else if (change.type === ChangeTypesEnum.CARD) {
     const { cardData, columnId, index } = change.payload;
     insertNewCard(cardData, columnId, index);
   }
 }
 
-export async function insertNewColumns(column: DataSchema) {
+export async function insertNewColumns(column: DataSchema, index: number) {
   const supabase = await createSupabaseServerClient();
   const { column_name, column_id, color } = column;
 
-  const { error } = await supabase.from("columns").insert({ column_name, column_id, color });
+  const { error } = await supabase.from("columns").insert({ column_name, column_id, color, index });
 
   if (error) {
     throw new Error(`Error while creating new columns: ${JSON.stringify(error)}`);

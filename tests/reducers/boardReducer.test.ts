@@ -32,7 +32,7 @@ describe("Board Reducer Add Actions", () => {
       data: [action.payload],
       changes: {
         ...initialState.changes,
-        added: [{ type: ChangeTypesEnum.COLUMN, payload: { columnData: action.payload } }],
+        added: [{ type: ChangeTypesEnum.COLUMN, payload: { columnData: action.payload, index: 0 } }],
       },
     };
     expect(boardReducer(initialState, action)).toEqual(expectedState);

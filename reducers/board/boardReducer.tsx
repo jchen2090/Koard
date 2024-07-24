@@ -38,12 +38,16 @@ export function boardReducer(state: initialStateType, action: actionTypes): init
       };
     }
     case ActionType.ADD_COLUMN:
+      const index = state.data.length;
       return {
         ...state,
         data: [...state.data, action.payload],
         changes: {
           ...state.changes,
-          added: [...state.changes.added, { type: ChangeTypesEnum.COLUMN, payload: { columnData: action.payload } }],
+          added: [
+            ...state.changes.added,
+            { type: ChangeTypesEnum.COLUMN, payload: { columnData: action.payload, index: index } },
+          ],
         },
       };
     case ActionType.ADD_CARD: {
