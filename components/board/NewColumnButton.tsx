@@ -17,7 +17,7 @@ const formSchema = z.object({
 
 export default function NewColumnButton() {
   const [isOpen, setIsOpen] = useState(false);
-  const { dispatch } = useBoardContext();
+  const { state, dispatch } = useBoardContext();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -25,11 +25,11 @@ export default function NewColumnButton() {
     },
   });
 
-  //TODO: User should not be able to create duplicate columns
   const createNewColumn = (values: z.infer<typeof formSchema>) => {
     const { columnName } = values;
+    const columnExists = state.data.findIndex((data) => data.column_name === columnName) >= 0;
 
-    if (columnName === "") {
+    if (columnName === "" || columnExists) {
       setIsOpen(false);
       return;
     }

@@ -4,7 +4,6 @@ import { guestSignIn } from "@/lib/supabase/actions";
 import { Button } from "../ui/button";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { createUserEntry } from "@/lib/supabase/queries";
 
 export default function GustSignInButton() {
   const router = useRouter();
@@ -13,7 +12,6 @@ export default function GustSignInButton() {
     const { authenticated } = await guestSignIn();
 
     if (authenticated) {
-      await createUserEntry();
       router.push("/project");
     } else {
       toast.error("Error with server", {

@@ -69,7 +69,7 @@ export default function Board() {
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
-            className="flex flex-row mr-4 w-auto overflow-x-auto"
+            className="flex flex-row w-auto overflow-x-auto mt-4 ml-2"
           >
             {state.data.map((column, idx) => (
               <Column columnIdx={idx} key={column.column_id} />

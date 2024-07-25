@@ -57,5 +57,6 @@ export async function guestSignIn() {
     console.log(`Error with guest login: ${JSON.stringify(error, null, 2)}`);
     return { authenticated: false };
   }
+  createUserEntry();
   return { authenticated: true };
 }
