@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { RxCheck, RxReload } from "react-icons/rx";
 import { useGlobalContext } from "./providers/globalStateProvider";
+import { usePathname } from "next/navigation";
 
 function updateStatusMessage(message: string) {
   const pattern = /\./g;
@@ -23,6 +24,9 @@ export default function SyncStatus() {
   const { state } = useGlobalContext();
   const [statusMessage, setStatusMessage] = useState("Saving");
   const syncedMessage = useRef("");
+  const pathName = usePathname();
+
+  const isProjectPage = pathName === "/project";
 
   useEffect(() => {
     if (state.isSynced) {
@@ -37,6 +41,10 @@ export default function SyncStatus() {
       syncedMessage.current = "Saved!";
     };
   }, [state.isSynced, statusMessage]);
+
+  if (!isProjectPage) {
+    return;
+  }
 
   if (state.isSynced) {
     return (

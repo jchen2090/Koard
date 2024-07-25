@@ -10,6 +10,8 @@ import { signUpWithEmailAndPassword } from "../../lib/supabase/actions";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { LoadingButton } from "../ui/loadingButton";
+import toast from "react-hot-toast";
+import { createUserEntry } from "@/lib/supabase/queries";
 
 const formSchema = z
   .object({
@@ -21,7 +23,7 @@ const formSchema = z
     (data) => {
       return data.confirmPassword === data.password;
     },
-    { message: "Passwords do not match", path: ["confirmPassword"] },
+    { message: "Passwords do not match", path: ["confirmPassword"] }
   );
 
 export default function SignUpForm() {
@@ -36,14 +38,18 @@ export default function SignUpForm() {
     },
   });
 
-  //TODO: Currently 2FA is disabled, will enable someday
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       setIsLoading(true);
       await signUpWithEmailAndPassword(values);
       router.push("/project");
     } catch (e) {
-      alert(`Error with server, try again later`);
+      toast.error("Error with server", {
+        style: {
+          background: "hsl(var(--destructive))",
+          color: "hsl(var(--destructive-foreground))",
+        },
+      });
     }
   };
 
@@ -89,7 +95,7 @@ export default function SignUpForm() {
             </FormItem>
           )}
         />
-        {isLoading ? <LoadingButton /> : <Button className="mt-2">Log in</Button>}
+        {isLoading ? <LoadingButton /> : <Button className="mt-2">Sign Up</Button>}
       </form>
     </Form>
   );
